@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Edu Track Pay
+---
+**In this we build college management project which manage college fee, event,attendance student also manage coaching**
+___
+ ## Fetuares
+    - college fee payment
+    - coaching fee payment
+    - student and teacher attendance manage
+    - event manages(registration fee, free registration)
+    - addmision (college and coaching)
+    - college or coaching rating
+ ## Backend structure
+ - controllers
+ - models<br>
+     > ### Student 
+     (id , rollNumber, gender , address , email, phone , password collegeId, studentId, classId,avatar , converImage, parentId, cardId, dob createdAt , updatedAt )
+     <br> 
+     > ### Parent 
+     (id , name , gender , address , email ,phone , age , password , isVerifeid ,otp, createdAt , updatedAt)
+     <br>
+     > ### College 
+     (id , title , name , address , email , phone , field ,ownerDeatils attribute,password, description,images ,logo, website , createdAt, updatedAt)
+     <br>
+     > ### Coaching
+      (id , address, field , title , name , owner Deatils attribute, password,description, imagees,logo,phone,email, website, createdAt , updatedAt)
+     <br>
+     > ### Class 
+     (id , name , stander , field , studentId, collegeId, coachingId, session, createAt, updatedAt)
+     <br>
+     > #### Coaching_Class_Pricing 
+     (id , price , coachingId, stander,createAt, updatedAt)
+     <br>
+     > ### College_Class_pricing 
+     (id , price ,collegeId , stander, createdAt , updatedAt)
+     <br>
+     >### Coaching_Fee_PaymentByStudent 
+     (id , transcationId, studentId , coachingId, classId,price,coachingClassPricingId, status)
+     <br>
+     > ### College_fee_paymentBy_student 
+     (id , transcationId, stundetId, collegeId , classId , price , coachingClassPricingId, status , createdAt , updatedAt)
+     <br>
+     > ### College_Student 
+     (id , rollNumber, collegeId, studentId , classId, createdAt , updatedAt)
 
-## Getting Started
+ - connections
+ - utility
+ - routes
+   > ## User.route.js 
+   - In this route we define student account which include CRUD (Create, Retrive, Update, Delete), Recovery Account, forget account password
+   > ## College.route.js
+   - In this route we define college account which include CRUD (Create, Retrive, Update, Delete), Recovery Account, forget account password
+   > ## Coaching.route.js
+   - In this route we define coaching account which include CRUD (Create, Retrive, Update, Delete), Recovery Account, forget account password
+   > ## Parent.route.js
+   - In this route we define parent account which include CRUD (Create, Retrive, Update, Delete), Recovery Account, forget account password
+   > ## College.fee.payment.route.js
+   - In this route we manage all college payment activity including student fee and teacher fee
+   > ## Coaching.fee.payment.route.js
+   - In this route we manage all coaching free including student and teacher
+ - middleware
+   - in this we define middleware which authorized our system to protect account,payment ...etc
+   > ## auth.middleware.js
+   - this used to project our account
+ - server
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
