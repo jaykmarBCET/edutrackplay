@@ -46,14 +46,7 @@ const Student = sequelize.define("student",{
             max:9999999999
         }
     },
-    age:{
-        type:DataTypes.SMALLINT,
-        allowNull:false,
-        validate:{
-            min:14,
-            max:70
-        }
-    },
+    
     password:{
         type:DataTypes.STRING,
         allowNull:false,

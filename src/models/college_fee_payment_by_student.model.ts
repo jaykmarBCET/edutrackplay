@@ -41,13 +41,17 @@ const CollegeFeePaymentByStudent = sequelize.define("college_fee_payment_by_stud
         allowNull:false,
         defaultValue:0
     },
-    coachingClassPricingId:{
+    collegeClassPricingId:{
         type:DataTypes.BIGINT,
         allowNull:false,
         references:{
             model:'college_class_pricing',
             key:'id'
         }
+    },
+    expireDuration:{
+        type:DataTypes.NUMBER,
+        allowNull:false
     },
     status:{
         type:DataTypes.ENUM,

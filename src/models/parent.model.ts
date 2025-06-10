@@ -64,7 +64,7 @@ const Parent = sequelize.define("parent",{
     },
     otp:{
         type:DataTypes.NUMBER,
-        allowNull:false
+        
     }
     
 },{

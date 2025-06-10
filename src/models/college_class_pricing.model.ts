@@ -29,6 +29,10 @@ const CollegeClassPricing = sequelize.define("college_class_pricing",{
             max:20,
             min:1
         }
+    },
+    duration:{
+        type:DataTypes.NUMBER,
+        allowNull:false
     }
 },{
     timestamps:true,

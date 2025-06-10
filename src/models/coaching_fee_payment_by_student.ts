@@ -49,6 +49,10 @@ const CoachingFeePaymentByStudent = sequelize.define("coaching_fee_payment_by_st
             key:'id'
         }
     },
+    expireDuration:{
+        type:DataTypes.NUMBER,
+        allowNull:false,
+    },
     status:{
         type:DataTypes.ENUM,
         values:["Payment failed", "Payment Pending", "Payment Successfully"],

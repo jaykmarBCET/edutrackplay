@@ -29,6 +29,11 @@ const CoachingClassPricing = sequelize.define("coaching_class_pricing",{
             max:20,
             min:1
         }
+    },
+    duration:{
+        // in days
+        type:DataTypes.NUMBER,
+        allowNull:false,
     }
 },{
     timestamps:true,

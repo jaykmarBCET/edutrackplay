@@ -84,5 +84,21 @@ export const update = async (req: NextRequest)=>{
     if(response?.message){
         return NextResponse.json(response , {status:response.message==='not found'?404:400})
     }
+    // @ts-ignore
     const parent = req.user
+
+    const forUpdateParentFind = await Parent.findOne({where:{id:parent.id, email:parent.email}})
+    // 
+    forUpdateParentFind.email = email;
+    
+    forUpdateParentFind.name = name;
+    
+    forUpdateParentFind.address = address;
+    
+    forUpdateParentFind.phone = phone;
+    
+    await forUpdateParentFind.save({validate:true})
+    
+    delete forUpdateParentFind.password;
+    return NextResponse.json(forUpdateParentFind , {status:200})
 }
