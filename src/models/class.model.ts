@@ -1,7 +1,9 @@
-import { sequelize } from "@/connection/db.connection";
-import { DataTypes } from "sequelize";
+import { sequelize  } from "@/connection/db.connection";
+import { DataTypes, Model, Optional } from "sequelize";
+import { ClassInfo } from "../../types/types";
 
-const Class = sequelize.define("class",{
+type ClassCreationAttribute = Optional<ClassInfo ,"id" | "createdAt" | "updatedAt">
+const Class = sequelize.define<Model<ClassInfo , ClassCreationAttribute>>("class",{
     id:{
         type:DataTypes.BIGINT,
         primaryKey:true,
@@ -59,6 +61,8 @@ const Class = sequelize.define("class",{
         }
     ]
 })
+
+
 
 
 export {Class}

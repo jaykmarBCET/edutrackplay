@@ -1,8 +1,10 @@
 import { sequelize } from "@/connection/db.connection";
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
+import { CoachingStudentInfo } from "../../types/types";
 
+type CoachingStudentCreationAttribute = Optional<CoachingStudentInfo ,"id" | "createdAt" | "updatedAt" >
 
-const CoachingStudent = sequelize.define('coaching_student',{
+const CoachingStudent = sequelize.define<Model<CoachingStudentInfo, CoachingStudentCreationAttribute>>('coaching_student',{
     id:{
         type:DataTypes.STRING,
         autoIncrement:true,

@@ -1,6 +1,9 @@
 import { sequelize } from "@/connection/db.connection";
-import { DataTypes} from 'sequelize'
-const Coaching = sequelize.define("college",{
+import { DataTypes, Model, Optional} from 'sequelize'
+import { CoachingInfo } from "../../types/types";
+
+type CoachingCreationAttribute = Optional<CoachingInfo, "id" | "createdAt" | "updatedAt" >
+const Coaching = sequelize.define<Model<CoachingInfo, CoachingCreationAttribute>>("college",{
     id:{
         type:DataTypes.BIGINT,
         primaryKey:true,

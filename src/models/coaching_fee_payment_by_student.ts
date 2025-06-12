@@ -1,7 +1,10 @@
 import { sequelize } from "@/connection/db.connection";
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
+import { CoachingFeePaymentByStudentInfo } from "../../types/types";
 
-const CoachingFeePaymentByStudent = sequelize.define("coaching_fee_payment_by_student",{
+type CoachingFeePaymentByStudentCreationAttribute = Optional<CoachingFeePaymentByStudentInfo,"id" | "createdAt" | "updatedAt" >
+
+const CoachingFeePaymentByStudent = sequelize.define<Model<CoachingFeePaymentByStudentInfo, CoachingFeePaymentByStudentCreationAttribute>>("coaching_fee_payment_by_student",{
     id:{
         type:DataTypes.BIGINT,
         allowNull:false,

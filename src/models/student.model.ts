@@ -1,7 +1,10 @@
 import { sequelize } from "@/connection/db.connection";
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
+import { StudentInfo } from "../../types/types";
 
-const Student = sequelize.define("student",{
+type StudentCreationAttribute = Optional<StudentInfo ,"id" | "createdAt" | "updatedAt">
+
+const Student = sequelize.define<Model<StudentInfo , StudentCreationAttribute>>("student",{
     id:{
         type:DataTypes.BIGINT,
         autoIncrement:true,
@@ -95,7 +98,15 @@ const Student = sequelize.define("student",{
             fields:['id', "email", "phone"],
             unique:true
         }
-    ]
+    ],
+    defaultScope:{
+        attributes:{exclude:['password']}
+    },
+    scopes:{
+        withPassword:{
+            attributes:{include:['password']}
+        }
+    }
 })
 
 

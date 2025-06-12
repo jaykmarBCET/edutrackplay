@@ -1,7 +1,9 @@
 import { sequelize } from "@/connection/db.connection";
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
+import { CollegeClassPricingInfo } from "../../types/types";
 
-const CollegeClassPricing = sequelize.define("college_class_pricing",{
+type CollegeClassPricingCreationAttribute = Optional<CollegeClassPricingInfo,"id" | "createdAt" | "updatedAt" >
+const CollegeClassPricing = sequelize.define<Model<CollegeClassPricingInfo, CollegeClassPricingCreationAttribute>>("college_class_pricing",{
     id:{
         type:DataTypes.BIGINT,
         autoIncrement:true,

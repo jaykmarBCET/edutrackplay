@@ -1,7 +1,10 @@
 import { sequelize } from "@/connection/db.connection";
-import { DataTypes } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
+import { ParentInfo } from "../../types/types";
 
-const Parent = sequelize.define("parent",{
+type ParentCreationAttribute = Optional<ParentInfo,"id" | "createdAt" | "updatedAt">
+
+const Parent = sequelize.define<Model<ParentInfo, ParentCreationAttribute>>("parent",{
     id:{
         type:DataTypes.BIGINT,
         autoIncrement:true,
@@ -74,7 +77,15 @@ const Parent = sequelize.define("parent",{
             fields:['id', "email", "phone"],
             unique:true
         }
-    ]
+    ],
+    defaultScope:{
+        attributes:{exclude:["password"]}
+    },
+    scopes:{
+        withPassword:{
+            attributes:{include:["password"]}
+        }
+    }
 })
 
 
