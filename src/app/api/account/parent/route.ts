@@ -1,3 +1,4 @@
+import { sequelize } from "@/connection/db.connection";
 import { Parent } from "@/models/parent.model";
 import { AuthParent } from "@/services/auth";
 import { sendEmail } from "@/services/email";
@@ -98,18 +99,19 @@ export const PUT = async (req: NextRequest) => {
     if(!response.ok)return NextResponse.json({message:"something went wrong"},{status:500})
     const parent = response.parent
 
-    const forUpdateParentFind = await Parent.findOne({ where: { id: parent.id, email: parent.email } })
-    if(!forUpdateParentFind){
+    const updateParent = await Parent.findOne({ where: { id: parent.id, email: parent.email } })
+    if(!updateParent){
         return NextResponse.json({message:"Parent not found"}, { status:404})
     }
+    await sequelize.transaction(async(t)=>{
+        updateParent.set({
+            email,name,phone,address
+        })
+        updateParent.save({transaction:t})
+    })
 
-    forUpdateParentFind.set("email" , email)
-    forUpdateParentFind.set("name",name)
-    forUpdateParentFind.set("address" , address)
-    forUpdateParentFind.set("phone" , phone);
-
-    await forUpdateParentFind.save({ validate: true })
+    await updateParent.save({ validate: true })
 
     
-    return NextResponse.json({...forUpdateParentFind?.toJSON()}, { status: 200 })
+    return NextResponse.json({...updateParent?.toJSON()}, { status: 200 })
 }

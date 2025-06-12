@@ -73,12 +73,3 @@ export const GET = async (req: NextRequest) => {
         return NextResponse.json({ message: "something went wrong", error }, { status: 500 })
     }
 }
-
-export const PUT = async (req:NextRequest)=>{
-    try {
-        const response = await AuthParent(req);
-        
-    } catch (error) {
-        
-    }
-}
