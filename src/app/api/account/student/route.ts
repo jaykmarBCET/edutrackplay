@@ -2,9 +2,11 @@ import { sequelize } from "@/connection/db.connection";
 import { Student } from "@/models/student.model";
 import { authStudent } from "@/services/auth";
 import { generateToken } from "@/services/generateToken";
+// import { studentValidate } from "@/validation/validate";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+
 
 
 export const POST = async (req:NextRequest)=>{
