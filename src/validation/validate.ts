@@ -53,3 +53,8 @@ export const studentValidate=z.object({
   age:z.number().min(4).max(22),
   password:z.string().min(6).max(16)
 })
+
+export const loginValidate = z.object({
+  password:z.string().min(6).max(16),
+  email:z.string().email()
+})

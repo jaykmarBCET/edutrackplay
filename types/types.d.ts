@@ -161,3 +161,18 @@ export interface AuthParentInfo{
   id:number;
   email:string;
 }
+
+export interface StudentAdmissionRequestInfo{
+  id?:number;
+  studentId:number;
+  collegeId:number;
+  coachingId:number;
+  field:string;
+  title:string;
+  stander:string;
+  description:string;
+  isAccept:boolean;
+  reason:string;
+  createdAt?:Date;
+  updatedAt?:Date;
+}

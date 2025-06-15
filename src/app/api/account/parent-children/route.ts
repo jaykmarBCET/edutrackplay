@@ -1,6 +1,6 @@
 import { Parent } from "@/models/parent.model";
 import { Student } from "@/models/student.model";
-import { AuthParent } from "@/services/auth";
+import { authParent } from "@/services/auth";
 import { sendEmail } from "@/services/email";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,7 +15,7 @@ interface bodyInfo {
 }
 export const POST = async (req: NextRequest) => {
     try {
-        const response = await AuthParent(req);
+        const response = await authParent(req);
         if (response.message) {
             return NextResponse.json({ message: response.message }, { status: 400 })
         }
@@ -58,7 +58,7 @@ export const POST = async (req: NextRequest) => {
 
 export const GET = async (req: NextRequest) => {
     try {
-        const response = await AuthParent(req);
+        const response = await authParent(req);
         if(response.message){
             return NextResponse.json({message:response.message}, {status:400})
         }
