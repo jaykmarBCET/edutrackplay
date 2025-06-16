@@ -41,11 +41,14 @@ ___
      <br>
      > ### College_Student 
      (id , rollNumber, collegeId, studentId , classId, createdAt , updatedAt)
+     <br>
+     > ### StudentAdmissionRequest
+     (id , studentId, coachingId, collegeId, stander, description,title, field, reason , isAccept)
 
  - connections
  - utility
  - routes
-   > ## User.route.js 
+   > ## Student.route.js 
    - In this route we define student account which include CRUD (Create, Retrive, Update, Delete), Recovery Account, forget account password
    > ## College.route.js
    - In this route we define college account which include CRUD (Create, Retrive, Update, Delete), Recovery Account, forget account password
@@ -59,7 +62,38 @@ ___
    - In this route we manage all coaching free including student and teacher
  - middleware
    - in this we define middleware which authorized our system to protect account,payment ...etc
-   > ## auth.middleware.js
-   - this used to project our account
+   > ## authParent.js || authStudent || authCollege || authCoaching
+   - this used to protect our account
  - server
+  
 
+
+ <html>
+     <style>
+      h1{
+        background-color: rgb(60, 60, 196);
+        box-shadow: 1px 1px 5px 1px  #aaaa67;
+        text-align: center;
+      }
+      p{
+        background-color: white;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 10px;
+        padding-bottom: 20px;
+        border-radius: 10px;
+        color: black;
+        text-align: center;
+      }
+     </style>
+    <h1 >Frontend Structure</h1>
+    <h2>App</h2>
+      <pre>
+          App
+            - pages
+              --Home
+              --Dashboard
+              --login
+      </pre>
+
+ </html>
