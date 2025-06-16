@@ -11,15 +11,25 @@ export const StudentAdmissionRequest = sequelize.define<Model<StudentAdmissionRe
     },
     studentId:{
         type:DataTypes.BIGINT,
-        allowNull:false
+        allowNull:false,
+        references:{
+            model:"student",
+            key:'id'
+        }
     },
     collegeId:{
         type:DataTypes.BIGINT,
-        
+        references:{
+            model:"college",
+            key:"id"
+        }
     },
     coachingId:{
         type:DataTypes.BIGINT,
-        
+        references:{
+            model:"coaching",
+            key:'id'
+        }
     },
     field:{
         type:DataTypes.STRING,
@@ -30,7 +40,7 @@ export const StudentAdmissionRequest = sequelize.define<Model<StudentAdmissionRe
         allowNull:false,
     },
     stander:{
-        type:DataTypes.STRING,
+        type:DataTypes.NUMBER,
         allowNull:false,
     },
     description:{
