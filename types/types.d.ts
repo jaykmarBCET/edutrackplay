@@ -165,14 +165,14 @@ export interface AuthParentInfo{
 export interface StudentAdmissionRequestInfo{
   id?:number;
   studentId:number;
-  collegeId:number;
-  coachingId:number;
+  collegeId?:number;
+  coachingId?:number;
   field:string;
   title:string;
   stander:string;
   description:string;
-  isAccept:boolean;
-  reason:string;
+  isAccept?:boolean;
+  reason?:string;
   createdAt?:Date;
   updatedAt?:Date;
 }

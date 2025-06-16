@@ -62,4 +62,6 @@ export const StudentAdmissionRequest = sequelize.define<Model<StudentAdmissionRe
         type:DataTypes.DATE,
         defaultValue:new Date()
     }
+},{
+    timestamps:true
 })

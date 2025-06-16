@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-
+await sequelize.authenticate()
 
 export const POST = async (req:NextRequest)=>{
      try {
