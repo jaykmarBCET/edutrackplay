@@ -125,7 +125,7 @@ export interface CollegeInfo {
 export interface ParentInfo {
   id?: number;
   name: string;
-  gender?: "Female" | "Male"; 
+  gender?: "Female" | "Male" | string; 
   address: string;
   email: string;
   phone: number;
