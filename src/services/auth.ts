@@ -6,7 +6,7 @@ import { AuthParentInfo } from "../../types/types";
 import { College } from "@/models/college.model";
 
  export const authParent = async(req:NextRequest)=>{
-    const token = req.cookies.get("token")?.value || req.headers.get("authorization")
+    const token = req.cookies.get("parent")?.value || req.headers.get("authorization")
     if(!token){
         return {message:"Unauthorized parent", status:400}
     }
@@ -22,7 +22,7 @@ import { College } from "@/models/college.model";
 }
 
 export const authStudent = async(req:NextRequest)=>{
-    const token = req.cookies.get("token")?.value  || req.headers.get("authorization") as string
+    const token = req.cookies.get("student")?.value  || req.headers.get("authorization") as string
     if(!token)return {message:"Un authorization request", status:400}
      
     const decode = JWT.verify(token , process.env.JWT_SECRET_KEY!) as AuthParentInfo;
@@ -35,7 +35,7 @@ export const authStudent = async(req:NextRequest)=>{
 
 
 export const authCollege = async(req:NextRequest)=>{
-    const token = req.cookies.get("token")?.value || req.headers.get("authorization")
+    const token = req.cookies.get("college")?.value || req.headers.get("authorization")
 
     if(!token){
         return {message:"Unauthorized request",status:400}

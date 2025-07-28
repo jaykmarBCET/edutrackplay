@@ -1,20 +1,24 @@
 'use client'
-import { useRouter } from 'next/navigation'
 import React from 'react'
-function Home() {
-  const router = useRouter()
-  return (
-    <div className='flex flex-col gap-4'>
+import NavCard from '@/components/home/NavCard'
+import { FaUniversity, FaUserGraduate, FaUserTie, FaChalkboardTeacher } from 'react-icons/fa'
 
-      <button className='px-2 py-2 bg-blue-500 rounded-2xl' onClick={()=>router.push("/student/login?id=login")} > Student login</button>
-      <button className='px-2 py-2 bg-blue-500 rounded-2xl' onClick={()=>router.push("/parent/login?id=login")} > Parent login</button>
-      <button className='px-2 py-2 bg-blue-500 rounded-2xl' onClick={()=>router.push("/college/login?id=login")} >College login</button>
-      <button className='px-2 py-2 bg-blue-500 rounded-2xl' onClick={()=>router.push("/coaching/login?id=login")} >Coaching login</button>
-      <button className='px-2 py-2 bg-blue-500 rounded-2xl' onClick={()=>router.push("/student/register?id=register")} > Student register</button>
-      <button className='px-2 py-2 bg-blue-500 rounded-2xl' onClick={()=>router.push("/parent/register?id=register")} > Parent register</button>
-      <button className='px-2 py-2 bg-blue-500 rounded-2xl' onClick={()=>router.push("/college/register?id=register")} >College register</button>
-      <button className='px-2 py-2 bg-blue-500 rounded-2xl' onClick={()=>router.push("/coaching/register?id=register")} >Coaching register</button>
-      
+function Home() {
+  const links = [
+    { name: 'College', icon: FaUniversity, href: '/college/login?id=login', color: 'text-blue-600' },
+    { name: 'Student', icon: FaUserGraduate, href: '/student/login?id=login', color: 'text-green-600' },
+    { name: 'Parent', icon: FaUserTie, href: '/parent/login?id=login', color: 'text-purple-600' },
+    { name: 'Coaching', icon: FaChalkboardTeacher, href: '/coaching/login?id=login', color: 'text-orange-500' },
+  ]
+
+  return (
+    <div className='min-h-screen bg-gray-100 flex justify-center items-center flex-col py-10 px-4'>
+      <h1 className='text-3xl font-bold text-center mb-8 text-blue-700'>Select Your Portal</h1>
+      <div className='flex flex-wrap justify-center gap-6'>
+        {links.map((item) => (
+          <NavCard key={item.name} {...item} />
+        ))}
+      </div>
     </div>
   )
 }

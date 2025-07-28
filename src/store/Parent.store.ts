@@ -2,6 +2,7 @@ import {create} from 'zustand'
 import axios,{AxiosError}  from 'axios'
 import { ParentInfo,StudentInfo } from '../../types/types'
 import {toast} from 'react-hot-toast'
+import { AllRoot } from '@/constants/Routes'
 
 export interface ParentStoreInfo{
     parent:ParentInfo | undefined;
@@ -13,12 +14,12 @@ export interface ParentStoreInfo{
 }
 
 
-export const ParentStore = create<ParentStoreInfo>((set)=>({
+export const useParentStore = create<ParentStoreInfo>((set)=>({
     parent:undefined,
     student:[],
     createParent:async(parent)=>{
         try{
-          const response = await axios.post("/api/account/parent",parent)
+          const response = await axios.post(AllRoot.ParentRegister,parent)
           if(response.status<300){
             set({parent:response.data})
             toast.success("Created successfully")
@@ -29,7 +30,7 @@ export const ParentStore = create<ParentStoreInfo>((set)=>({
         }
     },
     updateParent: async(parent)=>{
-        const response = await axios.put("/api/account/parent",parent,{withCredentials:true})
+        const response = await axios.put(AllRoot.ParentUpdate,parent,{withCredentials:true})
         if(response.status>350){
             toast.error(response.data.message)
             return;
@@ -38,7 +39,7 @@ export const ParentStore = create<ParentStoreInfo>((set)=>({
     },
     getParent:async()=>{
         try {
-            const response = await axios.get("/api/account/parent",{withCredentials:true})
+            const response = await axios.get(AllRoot.ParentGet,{withCredentials:true})
             if(response.status<350){
                 const data = response.data.data;
                 set({parent:data})
@@ -48,7 +49,7 @@ export const ParentStore = create<ParentStoreInfo>((set)=>({
         }
     },
     getChildren:async()=>{
-        const response = await axios.get("/api/account/parent-children",{withCredentials:true})
+        const response = await axios.get(AllRoot.ParentGetChildren,{withCredentials:true})
         if(response.status<350){
             set({student:response.data.data})
             return
@@ -57,7 +58,7 @@ export const ParentStore = create<ParentStoreInfo>((set)=>({
 
     },
     addChildren:async(student)=>{
-        const response = await axios.post("/api/account/parent-children",student,{withCredentials:true})
+        const response = await axios.post(AllRoot.ParentAddChildren,student,{withCredentials:true})
 
         if(response.status<350){
             set({student:response.data.data})

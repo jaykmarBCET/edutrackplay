@@ -8,6 +8,7 @@ function CoachingAccount() {
   const searchParams = useSearchParams()
   const id = searchParams.get("id") as "login" | "register";
   const [switcher , setSwitcher] = useState<"login"| "register">(id)
+
   const handelSwitcher = ()=>{
     setSwitcher((prev)=>prev==='login'?"register":"login")
   }

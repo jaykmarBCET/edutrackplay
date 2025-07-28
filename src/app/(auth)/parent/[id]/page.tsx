@@ -1,8 +1,9 @@
 'use client'
 import ParentLogin from '@/components/auth/ParentLogin';
 import ParentRegister from '@/components/auth/ParentRegister';
-import { useSearchParams } from 'next/navigation'
-import React, { useState } from 'react'
+import { useParentStore } from '@/store/Parent.store';
+import { useRouter, useSearchParams } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 
 function ParentAccount() {
   const searchParams = useSearchParams()
@@ -11,6 +12,16 @@ function ParentAccount() {
   const handelSwitcher = ()=>{
     setSwitcher((prev)=>prev==='login'?"register":"login")
   }
+  const router = useRouter()
+  const {getParent,parent} = useParentStore()
+
+  if(parent?.email.trim()){
+    router.push("/parent")
+  }
+
+  useEffect(()=>{
+    getParent()
+  },[])
 
   if(switcher==='login'){
 

@@ -6,12 +6,13 @@ import { generateToken } from "@/services/generateToken";
 import { cookies } from "next/headers";
 
 
+
 export const POST = async(req:NextResponse)=>{
      try {
         const {email , password}:{email:string,password:string} =  await req.json()
-        
+        console.log(email,password)
         if(!email || !password){
-           return NextResponse.json({message:""})
+           return NextResponse.json({message:""},{status:401})
         }
         const response = collegeValidate.safeParse({email,password})
         if(response.error){
@@ -33,7 +34,7 @@ export const POST = async(req:NextResponse)=>{
         
         const cookieStore =  await cookies()
         cookieStore.set({
-           name:"token",
+           name:"college",
            value:token,
            httpOnly:true,
            sameSite:'strict',

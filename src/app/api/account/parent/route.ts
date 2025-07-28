@@ -52,7 +52,7 @@ export const POST = async (req: NextRequest) => {
 
         const cookiesStore =  await cookies()
         cookiesStore.set({
-            name:"token",
+            name:"parent",
             value:token,
             httpOnly:true,
             sameSite:"strict",

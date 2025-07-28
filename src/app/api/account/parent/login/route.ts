@@ -24,7 +24,7 @@ export const POST = async (req: NextRequest) => {
     
         const token = await generateToken({ email: email, id: parentAccount.get().id! })
         if (!token) return NextResponse.json({ message: "something want wrong while generating token" }, { status: 500 })
-            ; (await cookies()).set("token", token, { httpOnly: true, sameSite: true, secure: true })
+            ; (await cookies()).set("parent", token, { httpOnly: true, sameSite: true, secure: true })
         const user  = parentAccount.toJSON()
         
         return NextResponse.json({...user}, { status: 200 })

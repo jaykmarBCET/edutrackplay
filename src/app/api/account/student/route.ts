@@ -25,7 +25,7 @@ export const POST = async (req:NextRequest)=>{
         const cookiesStore =  await cookies()
 
         cookiesStore.set({
-            name:"token",
+            name:"student",
             value:token,
             httpOnly:true,
             sameSite:'strict',
@@ -89,5 +89,15 @@ export const PUT = async (req: NextRequest) => {
     return NextResponse.json({ message: "Something went wrong", error }, { status: 500 });
   }
 };
+
+export const GET = async(req:NextRequest)=>{
+  const currentStudent = await authStudent(req)
+
+  if(currentStudent.message){
+    return NextResponse.json({message:currentStudent.message},{status:currentStudent.status})
+  }
+
+  return NextResponse.json(currentStudent.status,{status:200})
+}
 
 
