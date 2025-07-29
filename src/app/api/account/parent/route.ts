@@ -17,7 +17,7 @@ interface bodyInfo {
     age: number;
     password: string;
 }
-
+sequelize.authenticate()
 export const POST = async (req: NextRequest) => {
     const { name, address, gender, email, phone, age, password }: bodyInfo = await req.json()
     try {

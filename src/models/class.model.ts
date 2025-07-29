@@ -62,7 +62,7 @@ const Class = sequelize.define<Model<ClassInfo , ClassCreationAttribute>>("class
     ]
 })
 
-
+sequelize.authenticate()
 
 
 export {Class}
