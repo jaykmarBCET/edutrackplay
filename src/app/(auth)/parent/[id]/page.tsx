@@ -9,13 +9,16 @@ function ParentAccount() {
   const searchParams = useSearchParams()
   const id = searchParams.get("id") as "login" | "register";
   const [switcher , setSwitcher] = useState<"login"| "register">(id)
+  
+ 
   const handelSwitcher = ()=>{
     setSwitcher((prev)=>prev==='login'?"register":"login")
   }
+  
   const router = useRouter()
   const {getParent,parent} = useParentStore()
 
-  if(parent?.email.trim()){
+  if(parent?.email){
     router.push("/parent")
   }
 

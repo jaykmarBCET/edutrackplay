@@ -1,60 +1,64 @@
-import { Parent } from "@/models/parent.model";
-import { Student } from "@/models/student.model";
+import { PrismaClient } from "@/generated/prisma";
 import { authParent } from "@/services/auth";
-import { sendEmail } from "@/services/email";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
+import { uploadImage } from "@/utility/uploadCloudinary";
 
-interface bodyInfo {
-    name: string;
-    email: string;
-    password: string;
-    dob: Date;
-    address: string;
-    avatar: string
-}
+const prisma = new PrismaClient();
+
 export const POST = async (req: NextRequest) => {
-    try {
-        const response = await authParent(req);
-        if (response.message) {
-            return NextResponse.json({ message: response.message }, { status: 400 })
-        }
-        if (!response.ok) {
-            throw new Error("something went wrong")
-        }
-        const parent = await Parent.findOne({ where: { id: response.parent.id, email: response.parent.email } })
-        if (!parent) return NextResponse.json({ message: "Parent not found" }, { status: 404 })
-        const { name, email, password, dob, address, avatar }: bodyInfo = await req.json()
-        if (!name || !email || !password || !dob || !address || !avatar) {
-            return NextResponse.json({ message: "all field required" }, { status: 400 })
-        }
-
-        const alreadyHave = await Student.findOne({ where: { email: email } })
-        if (!alreadyHave) return NextResponse.json({ message: "Already have account" }, { status: 400 })
-        const hashPassword = await bcrypt.hash(password, 10)
-        const newStudent = await Student.create({ name, email, dob, address, avatar, password: hashPassword, parentId: response.parent.id })
-
-        if (!newStudent) {
-            throw new Error("server error while creating student")
-        }
-        const html = `
-  <h2>Welcome, ${name}!</h2>
-  <p><strong>Email:</strong> ${email}</p>
-  <p><strong>Temporary Password:</strong> ${password}</p>
-  <p style="color: red;">⚠️ Please change your password immediately after logging in to ensure your account is secure.</p>
-  <p>If you didn’t request this account, you can ignore this message.</p>
-`;
-        await sendEmail({ subject: "Your Student Account Has Been Created", html, email });
-
-        const allStudent = await Student.findAll({ where: { parentId: response.parent.id } })
-        if (!allStudent) {
-            throw new Error("something went wrong while fetching student")
-        }
-        return NextResponse.json(allStudent.toString(), { status: 200 })
-    } catch (error: unknown) {
-        return NextResponse.json({ message: "something went wrong", error }, { status: 500 })
+  try {
+    const response = await authParent(req);
+    if (response.status > 300) {
+      return NextResponse.json({ message: response.message }, { status: 401 });
     }
-}
+
+    const formData = await req.formData();
+    
+
+    const file = formData.get("avatar") as File;
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const address = formData.get("address") as string;
+    const dob = formData.get("dob") as string;
+    const gender = formData.get("gender") as string
+    const phone = formData.get("phone") as string
+ 
+
+    if (!file || !name || !email || !password || !address || !dob || !gender || !phone) {
+      return NextResponse.json({ message: "All fields are required" }, { status: 400 });
+    }
+    const already = await prisma.student.findFirst({where:{email}})
+    if(already){
+      return NextResponse.json({message:"Make sure each student have unique email id"},{status:400})
+    }
+    const avatarUrl = await uploadImage(file);
+    const hashPassword = await bcrypt.hash(password, 10);
+    const newStudent = await prisma.student.create({
+      data: {
+        name,
+        email,
+        password: hashPassword,
+        address,
+        dob: new Date(dob),
+        avatar: avatarUrl,
+        createdAt:new Date(),
+        gender:gender,
+        updatedAt:new Date(),
+        phone:phone,
+        parentId: response.parent?.id,
+      },
+    });
+
+    return NextResponse.json({ message: "Student Created", student: newStudent }, { status: 201 });
+
+  } catch (error: unknown) {
+    console.error(error);
+    return NextResponse.json({ message: "Something went wrong", error }, { status: 500 });
+  }
+};
+
 
 export const GET = async (req: NextRequest) => {
     try {
@@ -62,12 +66,12 @@ export const GET = async (req: NextRequest) => {
         if(response.message){
             return NextResponse.json({message:response.message}, {status:400})
         }
-        const getAllStudent =  await Student.findAll({where:{parentId:response.parent?.id}})
+        const getAllStudent =  await prisma.student.findMany({where:{parentId:response.parent?.id}})
         if(!getAllStudent){
             return NextResponse.json({message:"Student Empty"}, {status:400})
         }
 
-        return NextResponse.json(getAllStudent.toString(), {status:200})
+        return NextResponse.json(getAllStudent, {status:200})
 
     } catch (error: unknown) {
         return NextResponse.json({ message: "something went wrong", error }, { status: 500 })

@@ -5,7 +5,9 @@ import { authStudent } from "@/services/auth";
 import { sendEmail } from "@/services/email";
 import { ValidateData } from "@/validation/validate";
 import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from '@prisma/client'
 
+const prisma = new PrismaClient()
 interface bodyInfo{
     collegeId?:number;
     coachingId?:number;
@@ -17,8 +19,8 @@ interface bodyInfo{
 
 
 export const POST = async(req:NextRequest)=>{
-    const {collegeId,coachingId,field, title,stander, description}:bodyInfo =  await req.json()
-    if(!(collegeId || coachingId )|| !field || !title || !stander || !description){
+    const {collegeId,field, title,stander, description}:bodyInfo =  await req.json()
+    if(collegeId  || !field || !title || !stander || !description){
         return NextResponse.json({message:"all field required"}, { status:400})
     }
     const student = await authStudent(req);

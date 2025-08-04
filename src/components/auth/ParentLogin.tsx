@@ -1,19 +1,34 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import TextInput from '../ui/TextInput'
-
+import { useParentStore } from '@/store/Parent.store';
+import { useRouter } from 'next/navigation';
+import { BounceLoader } from 'react-spinners'
 
 function ParentLogin({ handelSwitcher }: { handelSwitcher: () => void }) {
-  const [data, setData] = useState<{email:string;password:string}>({password:'',email:""})
+  const [data, setData] = useState<{ email: string; password: string }>({ password: '', email: "" })
+  const { loginParent, getParent, parent, isLoading } = useParentStore()
+  const router = useRouter()
+  const handelLogin = useCallback(async () => {
+    await loginParent(data)
+  }, [data, loginParent])
 
-   const handelLogin = useCallback( async()=>{
 
-   },[])
+  useEffect(() => {
+    getParent()
+  }, [getParent])
+
+  useEffect(() => {
+    if (parent?.email?.trim()) {
+      router.push("/parent")
+    }
+  }, [parent])
   return (
     <div className='flex flex-col gap-1 bg-gray-700 justify-center items-center w-screen min-h-screen'>
       <div className='flex flex-col w-96  px-4 py-6 rounded-2xl'>
         <TextInput value={data.email} onChange={(e) => setData({ ...data, email: e.target.value })} className='' label='Email' color='blue' type='email' />
         <TextInput value={data.password} onChange={(e) => setData({ ...data, password: e.target.value })} className='' label='Password' color='blue' type='password' />
-        <button className='px-4 py-2 bg-blue-400 rounded-2xl' onClick={handelLogin}>Register</button>
+        <button className='px-4 py-2 bg-blue-400 rounded-2xl flex justify-center items-center' onClick={handelLogin}>{
+          isLoading ? <BounceLoader size={30} /> : "Login"}</button>
         <p className=' cursor-pointer text-blue-300 text-right' onClick={handelSwitcher}>Dont have an account</p>
       </div>
     </div>

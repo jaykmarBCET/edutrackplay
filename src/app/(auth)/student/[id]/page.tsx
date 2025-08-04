@@ -15,13 +15,16 @@ function StudentAccount() {
   }
   const {getStudent,student} = useStudentStore()
 
-  if(student?.email.trim()){
-    router.push("/student")
-  }
+  useEffect(()=>{
+    if(student?.email.trim()){
+      router.push("/student")
+    }
+
+  },[student,router])
 
   useEffect(()=>{
     getStudent()
-  },[])
+  },[getStudent])
 
   if(switcher==='login'){
 

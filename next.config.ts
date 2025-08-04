@@ -1,9 +1,16 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  server: {
-    externalPackages: ['pg'], // ✅ Tells Next.js NOT to bundle `pg`
-  },
+  serverExternalPackages: ['pg'],
+  images:{
+    remotePatterns:[
+      {
+        protocol:"https",
+        hostname:"res.cloudinary.com",
+        pathname:"**"
+      }
+    ]
+  }
 };
 
 export default nextConfig;

@@ -1,21 +1,24 @@
 import React, { useCallback, useState } from 'react';
 import TextInput from '../ui/TextInput';
 import { ParentInfo } from '../../../types/types';
+import { useParentStore } from '@/store/Parent.store';
 
 function ParentRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
   const [data, setData] = useState<ParentInfo>({
     name: '',
     email: '',
-    phone: 0,
+    phone: "",
     password: '',
     age: 0,
     address: '',
+    gender: "Male"
   });
+  const { createParent, isLoading } = useParentStore()
 
   const handelRegister = useCallback(async () => {
     console.log(data);
-    // TODO: Add API request or form submission
-  }, [data]);
+    await createParent(data)
+  }, [data,createParent]);
 
   return (
     <div className="flex flex-col gap-4 bg-gray-700 justify-center items-center w-screen min-h-screen text-white px-4">
@@ -58,7 +61,7 @@ function ParentRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
         />
         <TextInput
           value={data.phone}
-          onChange={(e) => setData({ ...data, phone: Number(e.target.value) })}
+          onChange={(e) => setData({ ...data, phone: e.target.value })}
           label="Phone Number"
           type="number"
           placeholder="Enter Phone Number"
@@ -72,12 +75,18 @@ function ParentRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
           placeholder="Enter Password"
           color="blue"
         />
+        <TextInput
+          label='Gender'
+          placeholder='Enter Gender'
+          value={data.gender}
+          onChange={(e) => setData({ ...data, gender: e.target.value })}
+        />
 
         <button
           className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-2xl transition"
           onClick={handelRegister}
         >
-          Register
+          {isLoading ? "Creating" : "Register"}
         </button>
 
         <p

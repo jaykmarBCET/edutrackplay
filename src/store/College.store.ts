@@ -6,7 +6,7 @@ import { AllRoot } from '@/constants/Routes';
 export interface CollegeStoreInfo {
     college: CollegeInfo | null;
 
-    createCollege: (College: CollegeInfo) => Promise<void>;
+    createCollege: (College: FormData) => Promise<void>;
     loginCollege: ({ email, password }: { email: string; password: string }) => Promise<void>;
     logoutCollege: () => Promise<void>;
     updateCollege: (College: CollegeInfo) => Promise<void>;

@@ -5,7 +5,7 @@ export const collegeValidate = z.object({
   title: z.string().trim().min(10).max(100).nonempty(),
   email: z.string().email().nonempty(),
 
-  phone: z.number().min(1000000000).max(100000000000),
+  phone: z.string().min(10).max(13),
 
   description: z.string().min(30).max(1000),
 
