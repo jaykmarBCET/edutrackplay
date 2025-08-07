@@ -18,6 +18,7 @@ function StudentAccount() {
   useEffect(()=>{
     if(student?.email.trim()){
       router.push("/student")
+
     }
 
   },[student,router])

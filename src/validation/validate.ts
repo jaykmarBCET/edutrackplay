@@ -7,7 +7,7 @@ export const collegeValidate = z.object({
 
   phone: z.string().min(10).max(13),
 
-  description: z.string().min(30).max(1000),
+  description: z.string().max(1000),
 
   logo: z
     .string()
@@ -22,12 +22,12 @@ export const collegeValidate = z.object({
       }
     }, { message: "Logo URL must be hosted on cloudinary.com" }),
 
-  owner_phone: z.number().min(1000000000).max(100000000000),
+  owner_phone: z.string().max(13),
 
-  owner_email: z.string().email().nonempty(),
+  owner_email: z.string().email(),
 
   owner_name: z.string().min(5).max(50).nonempty(),
-  address:z.string().trim().min(16).max(50),
+  address:z.string().trim().min(16).max(100),
   field:z.string().trim().min(3).max(30),
   password:z.string().trim().min(6).max(16)
 
@@ -36,7 +36,7 @@ export const collegeValidate = z.object({
 
 export const parentValidate= z.object({
   name:z.string().min(3).max(50).trim().nonempty(),
-  address:z.string().min(16).max(72).trim().nonempty(),
+  address:z.string().min(16).max(100).trim().nonempty(),
   gender:z.string(),
   email:z.string().email(),
   phone:z.number().min(1000000000).max(100000000000),
@@ -46,7 +46,7 @@ export const parentValidate= z.object({
 })
 export const studentValidate=z.object({
   name:z.string().min(3).max(50).trim().nonempty(),
-  address:z.string().min(16).max(72).trim().nonempty(),
+  address:z.string().min(16).max(100).trim().nonempty(),
   gender:z.string(),
   email:z.string().email(),
   phone:z.number().min(1000000000).max(10000000000),

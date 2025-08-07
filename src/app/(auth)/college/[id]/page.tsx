@@ -2,7 +2,7 @@
 import CollegeLogin from '@/components/auth/CollegeLogin';
 import CollegeRegister from '@/components/auth/CollegeRegister';
 import { useCollegeStore } from '@/store/College.store';
-import {  useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 
 
 import React, { useEffect, useState } from 'react'
@@ -10,25 +10,29 @@ import React, { useEffect, useState } from 'react'
 function CollegeAccount() {
   const searchParams = useSearchParams()
   const id = searchParams.get("id") as "login" | "register";
-  const [switcher , setSwitcher] = useState<"login"| "register">(id)
+  const [switcher, setSwitcher] = useState<"login" | "register">(id)
   const router = useRouter()
-  const handelSwitcher = ()=>{
-    setSwitcher((prev)=>prev==='login'?"register":"login")
+  const handelSwitcher = () => {
+    setSwitcher((prev) => prev === 'login' ? "register" : "login")
   }
-  const  {getCollege,college} = useCollegeStore()
-  if(college?.email.trim()){
-    router.push("/college")
-  }
+  const { getCollege, college } = useCollegeStore()
 
-  useEffect(()=>{
+
+  useEffect(() => {
     getCollege()
-  },[])
+  }, [getCollege])
 
-  if(switcher==='login'){
+  useEffect(() => {
+    if (college?.email) {
+      router.push("/college")
+    }
+  }, [college, router])
 
-    return <CollegeLogin handelSwitcher={handelSwitcher}/>
+  if (switcher === 'login') {
+
+    return <CollegeLogin handelSwitcher={handelSwitcher} />
   }
-  return <CollegeRegister handelSwitcher={handelSwitcher}/>
+  return <CollegeRegister handelSwitcher={handelSwitcher} />
 }
 
 export default CollegeAccount

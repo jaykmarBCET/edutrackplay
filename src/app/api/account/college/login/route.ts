@@ -1,5 +1,4 @@
 import {  NextResponse } from "next/server";
-import { collegeValidate } from "@/validation/validate";
 import bcrypt from "bcryptjs";
 import { generateToken } from "@/services/generateToken";
 import { cookies } from "next/headers";
@@ -16,11 +15,8 @@ export const POST = async(req:NextResponse)=>{
         if(!email || !password){
            return NextResponse.json({message:""},{status:401})
         }
-        const response = collegeValidate.safeParse({email,password})
-        if(response.error){
-           return NextResponse.json({message:response.error.message}, {status:400})
-        }
-        const data = response.data;
+        
+        const data = {email,password}
         const college = await prisma.college.findFirst({where:{email:data.email}})
         if(!college){
            return NextResponse.json({message:"college not found"}, {status:404})

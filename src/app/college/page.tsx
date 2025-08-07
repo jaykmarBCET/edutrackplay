@@ -1,26 +1,22 @@
 'use client';
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import {
-  UserIcon,
-  DocumentTextIcon,
-  BellIcon,
-  BookOpenIcon,
-  UserGroupIcon,
-  CreditCardIcon,
-  ChartBarIcon,
-  ChatBubbleLeftRightIcon,
   AcademicCapIcon,
   KeyIcon,
   ArrowRightOnRectangleIcon,
   ArrowLeftOnRectangleIcon,
   ArrowPathIcon
 } from '@heroicons/react/24/outline';
+import { dashboardItems } from '@/constants/CollegeDashboardInfo';
+import { useCollegeStore } from '@/store/College.store';
 import Image from 'next/image';
+import CollegeUpdate from '@/components/college/CollegeUpdate';
+
+
 
 // A reusable card component for the dashboard sections.
-const DashboardCard = ({ title, description, icon: Icon }) => (
+const DashboardCard = ({ title, description, icon: Icon }:{title:string;description:string;icon:React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>}) => (
   // Updated background and text colors for a dark theme
   <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-lg p-6 flex flex-col items-center text-center transition-transform transform hover:scale-105 duration-300">
     <div className="p-4 bg-indigo-600 text-white rounded-full mb-4">
@@ -32,13 +28,25 @@ const DashboardCard = ({ title, description, icon: Icon }) => (
 );
 
 // New component for the detailed profile section
-const CollegeProfileSection = ({ ownerName, collegeName }) => (
-  // Updated background and text colors for a dark theme
+const CollegeProfileSection = ({ ownerName, collegeName }:{ownerName:string;collegeName:string}) => {
+
+  const {college} = useCollegeStore()
+  const [isUpdate, setIsUpdate] = useState<boolean>(false)
+
+
+  const handelUpdate = ()=> {setIsUpdate((prev)=>!prev)}
+
+
+  return (
+  
   <div className="bg-gray-800 rounded-2xl shadow-lg p-6 flex flex-col items-center text-center transition-transform transform duration-300 row-span-2">
     <div className="flex flex-col items-center mb-4">
       {/* College Logo */}
       <div className="p-4 bg-indigo-600 text-white rounded-full mb-2">
-        <AcademicCapIcon className="h-12 w-12" />
+        {college?.logo ?
+          <Image  src={college?.logo as string} alt='Logo' width={12} height={12} className="h-16 w-16  rounded-2xl" />
+          : <AcademicCapIcon className='h-12 w-12' />
+        }
       </div>
       <h3 className="text-2xl font-bold text-white">{collegeName}</h3>
       <p className="text-md text-gray-400 mt-1">Managed by: {ownerName}</p>
@@ -50,7 +58,7 @@ const CollegeProfileSection = ({ ownerName, collegeName }) => (
     {/* Profile Actions */}
     <div className="flex flex-col w-full space-y-3">
       <button
-        onClick={() => alert('Update details functionality goes here')}
+        onClick={() => handelUpdate()}
         className="flex items-center justify-center gap-2 p-3 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition-colors"
       >
         <ArrowPathIcon className="h-5 w-5" />
@@ -78,50 +86,19 @@ const CollegeProfileSection = ({ ownerName, collegeName }) => (
         Change Email
       </button>
     </div>
+    {isUpdate&&<CollegeUpdate onCancel={handelUpdate}/>}
   </div>
-);
+)};
 
 // Main CollegePage component
 function CollegePage() {
-  const router = useRouter();
 
-  const dashboardItems = [
-    {
-      title: 'Student Requests',
-      description: 'Manage student applications and requests for admission.',
-      icon: DocumentTextIcon,
-    },
-    {
-      title: 'Notifications',
-      description: 'Stay updated with all the latest alerts and announcements.',
-      icon: BellIcon,
-    },
-    {
-      title: 'Classes',
-      description: 'Organize and manage all academic classes and courses.',
-      icon: BookOpenIcon,
-    },
-    {
-      title: 'Teachers',
-      description: 'View and manage the directory of all teachers and staff.',
-      icon: UserGroupIcon,
-    },
-    {
-      title: 'Payment Due',
-      description: 'Track and manage upcoming fee payments and financial records.',
-      icon: CreditCardIcon,
-    },
-    {
-      title: 'Student Progress',
-      description: 'Monitor the academic performance and progress of students.',
-      icon: ChartBarIcon,
-    },
-    {
-      title: 'Teacher Feedback',
-      description: 'Review and provide feedback on teacher performance.',
-      icon: ChatBubbleLeftRightIcon,
-    },
-  ];
+  const {getCollege,college} = useCollegeStore()
+  
+  console.log(college)
+  useEffect(()=>{
+    getCollege()
+  },[getCollege])
 
   return (
     // Updated main background and header text color for a dark theme
@@ -135,7 +112,7 @@ function CollegePage() {
 
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto'>
         {/* The new Profile Section component is placed here */}
-        <CollegeProfileSection ownerName="John Doe" collegeName="Bengal College of Engineering and Technology" />
+        <CollegeProfileSection ownerName={college?.owner_name as string} collegeName={college?.title as string} />
 
         {/* The rest of the dashboard cards */}
         {dashboardItems.map((item, index) => (

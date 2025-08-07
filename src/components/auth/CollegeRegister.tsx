@@ -17,6 +17,8 @@ import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { useCollegeStore } from '@/store/College.store';
 
+
+
 function CollegeRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
   const [college, setCollege] = useState<CollegeInfo>({
     title: '',
@@ -36,6 +38,7 @@ function CollegeRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
   const {createCollege} = useCollegeStore()
 
   // Clean up the logo preview URL to prevent memory leaks
+
   useEffect(() => {
     return () => {
       if (logoPreview) {
@@ -44,23 +47,6 @@ function CollegeRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
     };
   }, [logoPreview]);
 
-  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, type, value, files } = e.target;
-
-    if (type === 'file' && files && files[0]) {
-      const file = files[0];
-      if (file.size < 1024 * 1024) {
-        // Create a temporary URL for the logo preview
-        const url = URL.createObjectURL(file);
-        setLogoPreview(url);
-        setCollege({ ...college, [name]: url });
-      } else {
-        toast.error('File size must be less than 1MB');
-      }
-    } else {
-      setCollege({ ...college, [name]: type === 'number' ? +value : value });
-    }
-  };
 
   const handelRegister = async() => {
     const formData = new FormData()
@@ -68,8 +54,18 @@ function CollegeRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
     formData.append("title", college.title)
     formData.append("logo", college.logo as File)
     formData.append("address", college.address)
+    formData.append("field", college.field)
+    formData.append("owner_email", college.owner_email)
+    formData.append("owner_name", college.owner_name)
+    formData.append("owner_phone", college?.owner_phone as string)
+    formData.append("description", college?.description as string)
+    formData.append("phone", college.phone)
+    formData.append("email", college.email)
+    formData.append("website", college.website as string)
+    formData.append("password", college.password)
+    
     await createCollege(formData)
-    toast.success('Registration data logged to console!');
+    
   };
 
   return (
@@ -83,11 +79,11 @@ function CollegeRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
         {/* Logo Preview Section */}
         <div className="flex flex-col items-center mb-6">
           <div className="relative w-24 h-24 rounded-full border-4 border-indigo-500 bg-gray-700 flex items-center justify-center overflow-hidden shadow-inner">
-            {logoPreview ? (
+            { college.logo ? (
               <Image
                 width={96}
                 height={96}
-                src={logoPreview}
+                src={URL.createObjectURL(college.logo as File)}
                 alt="Logo Preview"
                 className="object-cover w-full h-full"
               />
@@ -105,7 +101,7 @@ function CollegeRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
                 id="logo-upload"
                 accept="image/*"
                 name="logo"
-                onChange={changeHandler}
+                onChange={(e)=>setCollege((prev)=>({...prev,logo:e.target.files!==null?e.target.files[0]:""}))}
                 className="hidden"
               />
             </label>
@@ -113,16 +109,16 @@ function CollegeRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
           <p className="text-sm text-gray-400 mt-2">{logoPreview ? "Change Logo" : "Upload Logo"}</p>
         </div>
 
-        <TextInput Icon={AcademicCapIcon} type="text" name="name" value={college.name} onChange={changeHandler} placeholder=" " label="College Name" color="indigo" />
-        <TextInput Icon={AcademicCapIcon} type="text" name="title" value={college.title} onChange={changeHandler} placeholder=" " label="College Title" color="indigo" />
-        <TextInput Icon={AcademicCapIcon} type="text" name="field" value={college.field} onChange={changeHandler} placeholder=" " label="Field" color="indigo" />
-        <TextInput Icon={UserIcon} type="text" name="owner_name" value={college.owner_name} onChange={changeHandler} placeholder=" " label="Owner Name" color="indigo" />
-        <TextInput Icon={EnvelopeIcon} type="email" name="owner_email" value={college.owner_email} onChange={changeHandler} placeholder=" " label="Owner Email" color="indigo" />
-        <TextInput Icon={LockClosedIcon} type="password" name="password" value={college.password} onChange={changeHandler} placeholder=" " label="Password" color="indigo" />
-        <TextInput Icon={PhoneIcon} type="number" name="phone" value={college.phone || ''} onChange={changeHandler} placeholder=" " label="Phone No." color="indigo" />
-        <TextInput Icon={EnvelopeIcon} type="email" name="email" value={college.email} onChange={changeHandler} placeholder=" " label="College Email" color="indigo" />
-        <TextInput Icon={GlobeAltIcon} type="text" name="website" value={college.website} onChange={changeHandler} placeholder=" " label="Website" color="indigo" />
-        <TextInput Icon={MapPinIcon} type="text" name="address" value={college.address} onChange={changeHandler} placeholder=" " label="College Address" color="indigo" />
+        <TextInput Icon={AcademicCapIcon} type="text" name="name" value={college.name} onChange={(e)=>setCollege((prev)=>({...prev,name:e.target.value}))} placeholder=" " label="College Name" color="indigo" />
+        <TextInput Icon={AcademicCapIcon} type="text" name="title" value={college.title} onChange={(e)=>setCollege((prev)=>({...prev,title:e.target.value}))} placeholder=" " label="College Title" color="indigo" />
+        <TextInput Icon={AcademicCapIcon} type="text" name="field" value={college.field} onChange={(e)=>setCollege((prev)=>({...prev,field:e.target.value}))} placeholder=" " label="Field" color="indigo" />
+        <TextInput Icon={UserIcon} type="text" name="owner_name" value={college.owner_name} onChange={(e)=>setCollege((prev)=>({...prev,owner_name:e.target.value}))} placeholder=" " label="Owner Name" color="indigo" />
+        <TextInput Icon={EnvelopeIcon} type="email" name="owner_email" value={college.owner_email} onChange={(e)=>setCollege((prev)=>({...prev,owner_email:e.target.value}))} placeholder=" " label="Owner Email" color="indigo" />
+        <TextInput Icon={LockClosedIcon} type="password" name="password" value={college.password} onChange={(e)=>setCollege((prev)=>({...prev,password:e.target.value}))} placeholder=" " label="Password" color="indigo" />
+        <TextInput Icon={PhoneIcon} type="number" name="phone" value={college.phone || ''} onChange={(e)=>setCollege((prev)=>({...prev,phone:e.target.value}))} placeholder=" " label="Phone No." color="indigo" />
+        <TextInput Icon={EnvelopeIcon} type="email" name="email" value={college.email} onChange={(e)=>setCollege((prev)=>({...prev,email:e.target.value}))} placeholder=" " label="College Email" color="indigo" />
+        <TextInput Icon={GlobeAltIcon} type="text" name="website" value={college.website} onChange={(e)=>setCollege((prev)=>({...prev,website:e.target.value}))} placeholder=" " label="Website" color="indigo" />
+        <TextInput Icon={MapPinIcon} type="text" name="address" value={college.address} onChange={(e)=>setCollege((prev)=>({...prev,address:e.target.value}))} placeholder=" " label="College Address" color="indigo" />
 
         <button
           onClick={handelRegister}

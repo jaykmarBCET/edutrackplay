@@ -120,6 +120,7 @@ export interface CollegeInfo {
   website?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  
 }
 
 export interface ParentInfo {
