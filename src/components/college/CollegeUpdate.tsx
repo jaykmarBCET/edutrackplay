@@ -8,7 +8,8 @@ import {
     MapPinIcon,
     AcademicCapIcon,
     GlobeAltIcon,
-    PhotoIcon
+    PhotoIcon,
+    
 } from '@heroicons/react/24/outline';
 import { CollegeInfo } from '../../../types/types';
 import TextInput from '../ui/TextInput';
@@ -19,8 +20,8 @@ import { useCollegeStore } from '@/store/College.store';
 
 function CollegeUpdate({onCancel}:{onCancel:()=>void}) {
     const [college, setCollege] = useState<CollegeInfo>({
-        title: '',
-        name: '',
+        title:useCollegeStore().college?.title as string,
+        name: useCollegeStore().college?.name,
         address: '',
         field: '',
         owner_name: '',
@@ -29,7 +30,8 @@ function CollegeUpdate({onCancel}:{onCancel:()=>void}) {
         logo: '',
         phone: "",
         email: '',
-        website: ''
+        website: '',
+        description:""
     });
 
 
@@ -54,6 +56,8 @@ function CollegeUpdate({onCancel}:{onCancel:()=>void}) {
         formData.append("phone", college.phone)
         formData.append("email", college.email)
         formData.append("website", college.website as string)
+        formData.append("description", college.website as string)
+     
 
         await updateCollege(formData)
 
@@ -105,10 +109,13 @@ function CollegeUpdate({onCancel}:{onCancel:()=>void}) {
                 <TextInput Icon={AcademicCapIcon} type="text" name="field" value={college.field} onChange={(e) => setCollege((prev) => ({ ...prev, field: e.target.value }))} placeholder=" " label="Field" color="indigo" />
                 <TextInput Icon={UserIcon} type="text" name="owner_name" value={college.owner_name} onChange={(e) => setCollege((prev) => ({ ...prev, owner_name: e.target.value }))} placeholder=" " label="Owner Name" color="indigo" />
                 <TextInput Icon={EnvelopeIcon} type="email" name="owner_email" value={college.owner_email} onChange={(e) => setCollege((prev) => ({ ...prev, owner_email: e.target.value }))} placeholder=" " label="Owner Email" color="indigo" />
+                <TextInput Icon={EnvelopeIcon} type="number" name="owner_phone" value={college.owner_phone} onChange={(e) => setCollege((prev) => ({ ...prev, owner_phone: e.target.value }))} placeholder=" " label="Owner Phone" color="indigo" />
                 <TextInput Icon={PhoneIcon} type="number" name="phone" value={college.phone || ''} onChange={(e) => setCollege((prev) => ({ ...prev, phone: e.target.value }))} placeholder=" " label="Phone No." color="indigo" />
                 <TextInput Icon={EnvelopeIcon} type="email" name="email" value={college.email} onChange={(e) => setCollege((prev) => ({ ...prev, email: e.target.value }))} placeholder=" " label="College Email" color="indigo" />
                 <TextInput Icon={GlobeAltIcon} type="text" name="website" value={college.website} onChange={(e) => setCollege((prev) => ({ ...prev, website: e.target.value }))} placeholder=" " label="Website" color="indigo" />
                 <TextInput Icon={MapPinIcon} type="text" name="address" value={college.address} onChange={(e) => setCollege((prev) => ({ ...prev, address: e.target.value }))} placeholder=" " label="College Address" color="indigo" />
+                <TextInput  type="text" name="description" value={college.description} onChange={(e) => setCollege((prev) => ({ ...prev, description: e.target.value }))} placeholder=" " label="Description" color="indigo" />
+
 
                 <button
                     onClick={handelUpdate}

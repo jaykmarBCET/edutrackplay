@@ -11,6 +11,7 @@ const prisma = new PrismaClient()
 
 export const POST = async (req: NextRequest) => {
     // create college account 
+
     const formData: FormData = await req.formData()
     
     const url = await uploadImage(formData.get("logo") as File)
@@ -91,32 +92,54 @@ export const GET = async (req: NextRequest) => {
 
 export const PUT = async (req: NextRequest) => {
     try {
+        
         const response = await authCollege(req)
+        const formData = await req.formData()
+        let logoUrl = ""
+        if(formData.get("logo")){
+            
+           logoUrl =  await uploadImage(formData.get("logo") as File) as string
+           
+        }
+        const body = {
+            logo:logoUrl ,
+            name:formData.get("name") as string,
+            title:formData.get("title") as string,
+            field: formData.get("field") as string,
+            owner_name: formData.get("owner_name") as string,
+            owner_email:formData.get("owner_email") as string,
+            phone: formData.get("phone") as string,
+            collegeEmail: formData.get("email") as string,
+            website: formData.get("webside") as string,
+            college_address: formData.get("address") as string,
+            description: formData.get("description") as string,
+            owner_phone: formData.get("owner_phone") as string
+
+        }
         
         if (response?.message) {
             return NextResponse.json({ message: response.message }, { status: response.status })
         }
-        const college = await prisma.college.findFirst({ where: { email: response.college?.get().email, id: response.college?.get().id } })
+        const college = await prisma.college.findFirst({ where: { email: response.college?.email, id: response.college?.id } })
         if (!college) {
             return NextResponse.json({ message: "college not found" }, { status: 404 })
         }
-        const { logo, title, name, address, field, password, description, images, phone, website, owner_email, owner_name, owner_phone } = await req.json() as CollegeInfo
+        
         await prisma.college.update({
             where: { id: college.id },
             data: {
-                logo: logo.trim() !== '' ? logo : college.logo as string,
-                title: title.trim() !== "" ? title : college.title,
-                name: name.trim() !== "" ? name : college.name,
-                address: address.trim() !== "" ? address : college.address,
-                field: field.trim() !== "" ? field : college.field,
-                password: password.trim() !== "" ? await bcrypt.hash(password, 10) : college.password,
-                description: description?.trim() !== "" ? description : college.description,
-                images: images!.length > 0 ? [...college.images!, ...images!] : [...college.images!] as string[],
-                phone: phone,
-                website: website?.trim() !== "" ? website : college.website,
-                owner_email: owner_email.trim() !== "" ? owner_email : college.owner_email,
-                owner_phone: owner_phone ? owner_phone : college.owner_phone,
-                owner_name: owner_name.trim() !== "" ? owner_name : college.owner_name
+                logo: body.logo.trim() !== '' ? body.logo : college.logo as string,
+                title: body.title.trim() !== "" ? body.title : college.title,
+                name: body.name.trim() !== "" ? body.name : college.name,
+                address: body.college_address !== null && body.college_address!=="" ? body.college_address : college.address,
+                field: body.field.trim() !== "" ? body.field : college.field,
+                password: body.phone.trim() !== "" ? await bcrypt.hash(body.phone, 10) : college.password,
+                description: body.description?.trim() !== "" ? body.description : college.description,
+                phone: body.phone,
+                website: body.website?.trim() !== "" ? body.website : college.website,
+                owner_email: body.owner_email.trim() !== "" ? body.owner_email : college.owner_email,
+                owner_phone: body.owner_phone ? body.owner_phone : college.owner_phone,
+                owner_name: body.owner_name.trim() !== "" ? body.owner_name : college.owner_name
             }
         })
 

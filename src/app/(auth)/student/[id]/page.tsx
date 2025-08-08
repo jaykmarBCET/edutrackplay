@@ -16,7 +16,7 @@ function StudentAccount() {
   const {getStudent,student} = useStudentStore()
 
   useEffect(()=>{
-    if(student?.email.trim()){
+    if(student?.email){
       router.push("/student")
 
     }

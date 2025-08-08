@@ -19,7 +19,7 @@ export const POST = async (req:NextRequest)=>{
         if(!student)return NextResponse.json({message:"student not found, please make sure email or password are correct"}, {status:404})
         
         const isCorrectPassword =  await bcrypt.compare(password ,student.password)
-        if(!isCorrectPassword)return NextResponse.json({message:"password is incorrect"})
+        if(!isCorrectPassword)return NextResponse.json({message:"password is incorrect"},{status:400})
         const token = await generateToken({email, id:student.id}) as string
         if(!token)throw new Error("token not generated yet")
         const cookiesStore =  await cookies()
