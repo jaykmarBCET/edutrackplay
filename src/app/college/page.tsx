@@ -6,103 +6,144 @@ import {
   KeyIcon,
   ArrowRightOnRectangleIcon,
   ArrowLeftOnRectangleIcon,
-  ArrowPathIcon
+  ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 import { dashboardItems } from '@/constants/CollegeDashboardInfo';
 import { useCollegeStore } from '@/store/College.store';
 import Image from 'next/image';
 import CollegeUpdate from '@/components/college/CollegeUpdate';
 
+// shadcn/ui components
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { useRouter } from 'next/navigation';
+
+// Dashboard card using shadcn
+const DashboardCard = ({
+  title,
+  description,
+  icon: Icon,
+  url
+}: {
+  title: string;
+  description: string;
+  url: string;
+  icon: React.ForwardRefExoticComponent<
+    React.SVGProps<SVGSVGElement>
+  >;
+}) => {
+   const navigate = useRouter()
+  return (
+    <Card onClick={() =>navigate.push(url)} className="bg-gray-800 border-gray-700 hover:shadow-lg hover:scale-105 transition-transform duration-300">
+      <CardHeader className="flex flex-col items-center">
+        <div className="p-4 bg-indigo-600 text-white rounded-full mb-4">
+          <Icon className="h-10 w-10" />
+        </div>
+        <CardTitle className="text-white">{title}</CardTitle>
+        <CardDescription className="text-gray-400 text-center">
+          {description}
+        </CardDescription>
+      </CardHeader>
+    </Card>
+  );
+}
 
 
-// A reusable card component for the dashboard sections.
-const DashboardCard = ({ title, description, icon: Icon }:{title:string;description:string;icon:React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>}) => (
-  // Updated background and text colors for a dark theme
-  <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-lg p-6 flex flex-col items-center text-center transition-transform transform hover:scale-105 duration-300">
-    <div className="p-4 bg-indigo-600 text-white rounded-full mb-4">
-      <Icon className="h-10 w-10" />
-    </div>
-    <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-    <p className="text-sm text-gray-400">{description}</p>
-  </div>
-);
+// Profile section using shadcn
+const CollegeProfileSection = ({
+  ownerName,
+  collegeName,
+}: {
+  ownerName: string;
+  collegeName: string;
+}) => {
+  const { college } = useCollegeStore();
+  const [isUpdate, setIsUpdate] = useState(false);
 
-// New component for the detailed profile section
-const CollegeProfileSection = ({ ownerName, collegeName }:{ownerName:string;collegeName:string}) => {
-
-  const {college} = useCollegeStore()
-  const [isUpdate, setIsUpdate] = useState<boolean>(false)
-
-
-  const handelUpdate = ()=> {setIsUpdate((prev)=>!prev)}
-
+  const handelUpdate = () => setIsUpdate((prev) => !prev);
 
   return (
-  
-  <div className="bg-gray-800 rounded-2xl shadow-lg p-6 flex flex-col items-center text-center transition-transform transform duration-300 row-span-2">
-    <div className="flex flex-col items-center mb-4">
-      {/* College Logo */}
-      <div className="p-4 bg-indigo-600 text-white rounded-full mb-2">
-        {college?.logo ?
-          <Image  src={college?.logo as string} alt='Logo' width={12} height={12} className="h-16 w-16  rounded-2xl" />
-          : <AcademicCapIcon className='h-12 w-12' />
-        }
-      </div>
-      <h3 className="text-2xl font-bold text-white">{collegeName}</h3>
-      <p className="text-md text-gray-400 mt-1">Managed by: {ownerName}</p>
-    </div>
+    <Card className="bg-gray-800 border-gray-700 row-span-2">
+      <CardHeader className="flex flex-col items-center text-center">
+        <div className="p-4 bg-indigo-600 text-white rounded-full mb-2">
+          {college?.logo ? (
+            <Image
+              src={college?.logo as string}
+              alt="Logo"
+              width={64}
+              height={64}
+              className="h-16 w-16 rounded-2xl"
+            />
+          ) : (
+            <AcademicCapIcon className="h-12 w-12" />
+          )}
+        </div>
+        <CardTitle className="text-2xl text-white">
+          {collegeName}
+        </CardTitle>
+        <CardDescription className="text-gray-400">
+          Managed by: {ownerName}
+        </CardDescription>
+      </CardHeader>
 
-    {/* Updated divider color */}
-    <div className="w-full h-px bg-gray-700 my-4" />
+      <Separator className="bg-gray-700 my-4" />
 
-    {/* Profile Actions */}
-    <div className="flex flex-col w-full space-y-3">
-      <button
-        onClick={() => handelUpdate()}
-        className="flex items-center justify-center gap-2 p-3 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition-colors"
-      >
-        <ArrowPathIcon className="h-5 w-5" />
-        Update Details
-      </button>
-      <button
-        onClick={() => alert('Change password functionality goes here')}
-        className="flex items-center justify-center gap-2 p-3 bg-indigo-500 text-white rounded-xl hover:bg-indigo-600 transition-colors"
-      >
-        <KeyIcon className="h-5 w-5" />
-        Change Password
-      </button>
-      <button
-        onClick={() => alert('Logout functionality goes here')}
-        className="flex items-center justify-center gap-2 p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
-      >
-        <ArrowRightOnRectangleIcon className="h-5 w-5" />
-        Logout
-      </button>
-      <button
-        onClick={() => alert('Email functionality goes here')}
-        className="flex items-center justify-center gap-2 p-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors"
-      >
-        <ArrowLeftOnRectangleIcon className="h-5 w-5" />
-        Change Email
-      </button>
-    </div>
-    {isUpdate&&<CollegeUpdate onCancel={handelUpdate}/>}
-  </div>
-)};
+      <CardContent className="flex flex-col gap-3">
+        <Button
+          onClick={handelUpdate}
+          className="bg-indigo-500 hover:bg-indigo-600"
+        >
+          <ArrowPathIcon className="h-5 w-5 mr-2" />
+          Update Details
+        </Button>
 
-// Main CollegePage component
+        <Button
+          onClick={() => alert('Change password functionality')}
+          className="bg-indigo-500 hover:bg-indigo-600"
+        >
+          <KeyIcon className="h-5 w-5 mr-2" />
+          Change Password
+        </Button>
+
+        <Button
+          onClick={() => alert('Logout functionality')}
+          className="bg-red-500 hover:bg-red-600"
+        >
+          <ArrowRightOnRectangleIcon className="h-5 w-5 mr-2" />
+          Logout
+        </Button>
+
+        <Button
+          onClick={() => alert('Change email functionality')}
+          className="bg-green-500 hover:bg-green-600"
+        >
+          <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-2" />
+          Change Email
+        </Button>
+      </CardContent>
+
+      {isUpdate && <CollegeUpdate onCancel={handelUpdate} />}
+    </Card>
+  );
+};
+
+// Main page
 function CollegePage() {
+  const { getCollege, college } = useCollegeStore();
 
-  const {getCollege,college} = useCollegeStore()
-  
-  console.log(college)
-  useEffect(()=>{
-    getCollege()
-  },[getCollege])
+  useEffect(() => {
+    getCollege();
+  }, [getCollege]);
 
   return (
-    // Updated main background and header text color for a dark theme
-    <div className='bg-gray-900 min-h-screen p-8'>
+    <div className="bg-gray-900 min-h-screen p-8">
       <div className="flex items-center justify-center mb-10">
         <h1 className="text-4xl font-extrabold text-white flex items-center gap-3">
           <AcademicCapIcon className="h-10 w-10 text-indigo-600" />
@@ -110,17 +151,19 @@ function CollegePage() {
         </h1>
       </div>
 
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto'>
-        {/* The new Profile Section component is placed here */}
-        <CollegeProfileSection ownerName={college?.owner_name as string} collegeName={college?.title as string} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        <CollegeProfileSection
+          ownerName={college?.owner_name as string}
+          collegeName={college?.title as string}
+        />
 
-        {/* The rest of the dashboard cards */}
         {dashboardItems.map((item, index) => (
           <DashboardCard
             key={index}
             title={item.title}
             description={item.description}
             icon={item.icon}
+            url={item.url}
           />
         ))}
       </div>

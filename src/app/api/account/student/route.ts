@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
+import { uploadImage } from "@/utility/uploadCloudinary";
 const prisma = new PrismaClient()
 
 export const POST = async (req: NextRequest) => {
@@ -38,54 +39,55 @@ export const POST = async (req: NextRequest) => {
 
 export const PUT = async (req: NextRequest) => {
   try {
-    const {
-      avatar,
-      coverImage,
+    const response = await authStudent(req);
+    if(response.message){
+      return NextResponse.json(response,response)
+    }
+    const student = response.student
+   const formData =  await req.formData()
+   const name = formData.get("name") as string;
+   const address = formData.get("address") as string;
+   const avatar = formData.get("avatar") as File;
+   const coverImage = formData.get("coverImage") as File;
+   const phone = formData.get("phone") as string;
+   const gender = formData.get("gender") as "Male" | "Female"
+   if(!name || !address  || !phone || !gender){
+    return NextResponse.json({message:"all must be valid"},{status:401})
+   }
+
+   let avatarUrl = ""
+   let coverImageUrl = ""
+   if(avatar){
+    avatarUrl =   await uploadImage(avatar)
+   }
+   if(coverImage){
+    coverImageUrl = await uploadImage(coverImage)
+   }
+   if(!avatarUrl.trim()){
+     avatarUrl = student?.avatar as string
+   }
+   if(!coverImageUrl.trim()){
+    coverImageUrl = student?.coverImage as string
+   }
+
+   const updatedUser = await prisma.student.update({
+    where:{
+      id:student?.id
+    },
+    data:{
       name,
-      dob,
-      password,
       address,
-    }: {
-      password: string;
-      address: string;
-      avatar: string;
-      coverImage: string;
-      name: string;
-      dob: Date;
-    } = await req.json();
-
-    const student = await authStudent(req);
-    if (student.message) {
-      return NextResponse.json({ message: student.message }, { status: student.status });
+      avatar:avatarUrl,
+      coverImage:coverImageUrl,
+      phone,
+      gender
     }
+   })
+   if(!updatedUser){
+    return NextResponse.json({message:"Something Went Wrong while updating student data"})
+   }
+   return NextResponse.json({...updatedUser,password:""},{status:200})
 
-    const currentStudent = await prisma.student.findFirst({
-      where: { id: student.student?.id, email: student.student?.email },
-    });
-
-    if (!currentStudent) {
-      return NextResponse.json({ message: "Student not found" }, { status: 404 });
-    }
-
-    const hashPassword = await bcrypt.hash(password, 10);
-
-
-    await prisma.student.update(
-      {
-        where: { id: currentStudent.id },
-        data: {
-          avatar: avatar,
-          coverImage: coverImage,
-          name: name,
-          dob: dob,
-          password: hashPassword,
-          address: address
-        }
-      }
-    )
-
-
-    return NextResponse.json({ message: "Student updated successfully" }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: "Something went wrong", error }, { status: 500 });
   }

@@ -41,6 +41,7 @@ export const POST = async (req: NextRequest) => {
         return NextResponse.json({ message: "all field required" })
     }
     
+    
     const alreadyHaveAnAccount = await prisma.college.findFirst(
         { where: { OR: [{ email: response.data.email }, { title: response.data.title }, { phone: response.data.phone }, { name: response.data.name }] } }
     )

@@ -153,7 +153,7 @@ export interface StudentInfo {
   avatar: string | File;
   coverImage?: string | File;
   cardId?: string;
-  dob: Date;
+  dob: Date ;
   createdAt?: Date;
   updatedAt?: Date;
 }

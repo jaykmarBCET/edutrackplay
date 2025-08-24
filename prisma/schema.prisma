@@ -9,43 +9,43 @@ datasource db {
 }
 
 model Parent {
-  id          Int      @id @default(autoincrement())
-  name        String
-  gender      String?
-  address     String
-  email       String   @unique
-  phone       String
-  age         Int
-  password    String
-  isVerified  Boolean  @default(false)
-  otp         Int?
-  createdAt   DateTime?
-  updatedAt   DateTime?
+  id         Int       @id @default(autoincrement())
+  name       String
+  gender     String?
+  address    String
+  email      String    @unique
+  phone      String
+  age        Int
+  password   String
+  isVerified Boolean   @default(false)
+  otp        Int?
+  createdAt  DateTime?
+  updatedAt  DateTime?
 
-  students    Student[]
+  students Student[]
 }
 
 model Student {
-  id          Int      @id @default(autoincrement())
-  name        String
-  gender      String?
-  address     String
-  email       String   @unique
-  phone       String?
-  password    String
-  score       Int?
-  isBlocked   Boolean  @default(false)
-  parentId    Int?
-  avatar      String
-  coverImage  String?
-  cardId      String?
-  dob         DateTime
-  createdAt   DateTime
-  updatedAt   DateTime
+  id         Int      @id @default(autoincrement())
+  name       String
+  gender     String?
+  address    String
+  email      String   @unique
+  phone      String?
+  password   String
+  score      Int?
+  isBlocked  Boolean  @default(false)
+  parentId   Int?
+  avatar     String
+  coverImage String?
+  cardId     String?
+  dob        DateTime
+  createdAt  DateTime
+  updatedAt  DateTime
 
-  parent      Parent?  @relation(fields: [parentId], references: [id])
-  coachingPayments CoachingFeePaymentByStudent[]
-  collegePayments  CollegeFeePaymentByStudent[]
+  parent              Parent?                       @relation(fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  coachingPayments    CoachingFeePaymentByStudent[]
+  collegePayments     CollegeFeePaymentByStudent[]
   coachingEnrollments CoachingStudent[]
   collegeEnrollments  CollegeStudent[]
   admissionRequests   StudentAdmissionRequest[]
@@ -70,14 +70,12 @@ model Coaching {
   createdAt   DateTime
   updatedAt   DateTime
 
-  classes     Class[]
-  pricings    CoachingClassPricing[]
-  payments    CoachingFeePaymentByStudent[]
-  students    CoachingStudent[]
-   admissionRequests StudentAdmissionRequest[]
+  classes           Class[]
+  pricings          CoachingClassPricing[]
+  payments          CoachingFeePaymentByStudent[]
+  students          CoachingStudent[]
+  admissionRequests StudentAdmissionRequest[]
 }
-
-
 
 model College {
   id          Int      @id @default(autoincrement())
@@ -98,29 +96,29 @@ model College {
   createdAt   DateTime
   updatedAt   DateTime
 
-  classes     Class[]
-  pricings    CollegeClassPricing[]
-  payments    CollegeFeePaymentByStudent[]
-  students    CollegeStudent[]
+  classes           Class[]
+  pricings          CollegeClassPricing[]
+  payments          CollegeFeePaymentByStudent[]
+  students          CollegeStudent[]
   admissionRequests StudentAdmissionRequest[]
 }
 
 model Class {
-  id          Int      @id @default(autoincrement())
-  name        String
-  stander     String
-  field       String
-  studentId   Int
-  collegeId   Int?
-  coachingId  Int?
-  session     DateTime?
-  createdAt   DateTime
-  updatedAt   DateTime
+  id         Int       @id @default(autoincrement())
+  name       String
+  stander    String
+  field      String
+  studentId  Int
+  collegeId  Int?
+  coachingId Int?
+  session    DateTime?
+  createdAt  DateTime
+  updatedAt  DateTime
 
-  college     College? @relation(fields: [collegeId], references: [id])
-  coaching    Coaching? @relation(fields: [coachingId], references: [id])
-  payments    CoachingFeePaymentByStudent[]
-  collegePayments CollegeFeePaymentByStudent[]
+  college             College?                      @relation(fields: [collegeId], references: [id])
+  coaching            Coaching?                     @relation(fields: [coachingId], references: [id])
+  payments            CoachingFeePaymentByStudent[]
+  collegePayments     CollegeFeePaymentByStudent[]
   coachingEnrollments CoachingStudent[]
   collegeEnrollments  CollegeStudent[]
 }
@@ -134,59 +132,59 @@ model CoachingClassPricing {
   createdAt  DateTime
   updatedAt  DateTime
 
-  coaching   Coaching @relation(fields: [coachingId], references: [id])
-  payments   CoachingFeePaymentByStudent[]
+  coaching Coaching                      @relation(fields: [coachingId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  payments CoachingFeePaymentByStudent[]
 }
 
 model CollegeClassPricing {
-  id         Int      @id @default(autoincrement())
-  price      Float
-  collegeId  Int
-  stander    Int
-  duration   Int
-  createdAt  DateTime
-  updatedAt  DateTime
+  id        Int      @id @default(autoincrement())
+  price     Float
+  collegeId Int
+  stander   Int
+  duration  Int
+  createdAt DateTime
+  updatedAt DateTime
 
-  college    College @relation(fields: [collegeId], references: [id])
-  payments   CollegeFeePaymentByStudent[]
+  college  College                      @relation(fields: [collegeId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  payments CollegeFeePaymentByStudent[]
 }
 
 model CoachingFeePaymentByStudent {
-  id                      Int      @id @default(autoincrement())
-  transactionId           String
-  studentId               Int
-  coachingId              Int
-  classId                 Int
-  price                   Float
-  expireDuration          Int
-  status                  String   @default("PENDING")
-  coachingClassPricingId  Int
-  createdAt               DateTime
-  updatedAt               DateTime
-
-  student                 Student  @relation(fields: [studentId], references: [id])
-  coaching                Coaching @relation(fields: [coachingId], references: [id])
-  class                   Class    @relation(fields: [classId], references: [id])
-  coachingClassPricing    CoachingClassPricing @relation(fields: [coachingClassPricingId], references: [id])
-}
-
-model CollegeFeePaymentByStudent {
   id                     Int      @id @default(autoincrement())
   transactionId          String
   studentId              Int
-  collegeId              Int
+  coachingId             Int
   classId                Int
   price                  Float
-  collegeClassPricingId  Int
   expireDuration         Int
-  status                 String   @default("Payment Pending")
+  status                 String   @default("PENDING")
+  coachingClassPricingId Int
   createdAt              DateTime
   updatedAt              DateTime
 
-  student                Student  @relation(fields: [studentId], references: [id])
-  college                College  @relation(fields: [collegeId], references: [id])
-  class                  Class    @relation(fields: [classId], references: [id])
-  collegeClassPricing    CollegeClassPricing @relation(fields: [collegeClassPricingId], references: [id])
+  student              Student              @relation(fields: [studentId], references: [id])
+  coaching             Coaching             @relation(fields: [coachingId], references: [id])
+  class                Class                @relation(fields: [classId], references: [id])
+  coachingClassPricing CoachingClassPricing @relation(fields: [coachingClassPricingId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+}
+
+model CollegeFeePaymentByStudent {
+  id                    Int      @id @default(autoincrement())
+  transactionId         String
+  studentId             Int
+  collegeId             Int
+  classId               Int
+  price                 Float
+  collegeClassPricingId Int
+  expireDuration        Int
+  status                String   @default("Payment Pending")
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  student             Student             @relation(fields: [studentId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  college             College             @relation(fields: [collegeId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  class               Class               @relation(fields: [classId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  collegeClassPricing CollegeClassPricing @relation(fields: [collegeClassPricingId], references: [id],onDelete: Cascade,onUpdate: Cascade)
 }
 
 model CoachingStudent {
@@ -198,9 +196,9 @@ model CoachingStudent {
   createdAt  DateTime
   updatedAt  DateTime
 
-  coaching   Coaching @relation(fields: [coachingId], references: [id])
-  student    Student  @relation(fields: [studentId], references: [id])
-  class      Class    @relation(fields: [classId], references: [id])
+  coaching Coaching @relation(fields: [coachingId], references: [id])
+  student  Student  @relation(fields: [studentId], references: [id])
+  class    Class    @relation(fields: [classId], references: [id])
 }
 
 model CollegeStudent {
@@ -212,9 +210,9 @@ model CollegeStudent {
   createdAt  DateTime
   updatedAt  DateTime
 
-  college    College @relation(fields: [collegeId], references: [id])
-  student    Student @relation(fields: [studentId], references: [id])
-  class      Class   @relation(fields: [classId], references: [id])
+  college College @relation(fields: [collegeId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+  class   Class   @relation(fields: [classId], references: [id])
 }
 
 model StudentAdmissionRequest {
@@ -231,7 +229,7 @@ model StudentAdmissionRequest {
   createdAt   DateTime
   updatedAt   DateTime
 
-  student     Student  @relation(fields: [studentId], references: [id])
-  college     College? @relation(fields: [collegeId], references: [id])
-  coaching    Coaching? @relation(fields: [coachingId], references: [id])
+  student  Student   @relation(fields: [studentId], references: [id])
+  college  College?  @relation(fields: [collegeId], references: [id])
+  coaching Coaching? @relation(fields: [coachingId], references: [id])
 }

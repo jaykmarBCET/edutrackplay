@@ -2,7 +2,7 @@
 import { useStudentStore } from '@/store/Student.store'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import {
   BellIcon,
@@ -17,9 +17,12 @@ import {
   AcademicCapIcon,
   BuildingLibraryIcon,
 } from '@heroicons/react/24/outline' 
+import StudentUpdate from '@/components/student/StudentUpdate'
+
 
 function StudentPage() {
   const router = useRouter()
+  const [showUpdateStudentModal, setShowUpdateParentModal] = useState<boolean>(false)
   const { student, getStudent } = useStudentStore()
 
   useEffect(() => {
@@ -30,8 +33,12 @@ function StudentPage() {
     toast.success('Logged out successfully!')
     router.push('/student/login?id=login')
   }
-
-  const handleUpdateProfile = () => router.push('/student/update')
+  const handelUpdateStudent = ()=>{
+    setShowUpdateParentModal((prev)=>!prev)
+  }
+  const handleUpdateProfile = () => {
+    setShowUpdateParentModal((prev)=>!prev)
+  }
   const handleChangePassword = () => router.push('/student/change-password')
   const handleChangeEmail = () => router.push('/student/change-email')
 
@@ -49,6 +56,9 @@ function StudentPage() {
     </div>
   )
 
+  if(showUpdateStudentModal){
+    return <StudentUpdate onCancel={handelUpdateStudent}/>
+  }
   return (
     <div className='flex flex-col lg:flex-row gap-8 bg-gray-50 min-h-screen p-8 font-sans'>
       {/* Sidebar */}
@@ -56,7 +66,7 @@ function StudentPage() {
         {/* Cover Image */}
         <div className='relative h-40 w-full bg-gradient-to-r from-purple-500 to-indigo-600'>
           <Image
-            src="/cover-placeholder.jpg" // Using a placeholder for now, ideally dynamic
+            src={student?.coverImage as string} // Using a placeholder for now, ideally dynamic
             fill
             className='object-cover opacity-60'
             alt='Cover'
@@ -143,7 +153,7 @@ function StudentPage() {
         <DashboardCard
           title="College Admission List"
           icon={BuildingLibraryIcon}
-          onClick={() => toast('Looking at College List!')}
+          onClick={() => router.push("/student/college-list")}
         >
           Explore potential colleges and admission requirements.
         </DashboardCard>
@@ -162,6 +172,7 @@ function StudentPage() {
           Manage your account preferences and privacy.
         </DashboardCard>
       </main>
+      
     </div>
   )
 }

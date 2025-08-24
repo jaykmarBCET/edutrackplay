@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import TextInput from '../ui/TextInput';
-import { ParentInfo } from '../../../types/types';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useParentStore } from '@/store/Parent.store';
+import { ParentInfo } from '../../../types/types';
 
 function ParentRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
   const [data, setData] = useState<ParentInfo>({
@@ -16,84 +17,73 @@ function ParentRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
   const { createParent, isLoading } = useParentStore()
 
   const handelRegister = useCallback(async () => {
-    console.log(data);
     await createParent(data)
-  }, [data,createParent]);
+  }, [data, createParent]);
 
   return (
-    <div className="flex flex-col gap-4 bg-gray-700 justify-center items-center w-screen min-h-screen text-white px-4">
-      <h1 className="text-2xl font-bold bg-blue-500 px-6 py-2 rounded-xl shadow mt-8">
-        Parent Register
-      </h1>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4">
+      <div className="w-full mt-10 max-w-lg bg-gray-800 rounded-2xl shadow-xl p-8 space-y-6">
+        {/* Header */}
+        <h1 className="text-3xl font-bold text-center text-white mb-2">
+          Create Parent Account
+        </h1>
+        <p className="text-center text-gray-400 text-sm mb-4">
+          Fill in the details to get started 🚀
+        </p>
 
-      <div className="flex flex-col w-full max-w-md px-4 py-6 bg-gray-800 rounded-2xl shadow-lg gap-4">
-        <TextInput
-          value={data.name}
-          onChange={(e) => setData({ ...data, name: e.target.value })}
-          label="Name"
-          type="text"
-          placeholder="Enter Name"
-          color="blue"
-        />
-        <TextInput
-          value={data.email}
-          onChange={(e) => setData({ ...data, email: e.target.value })}
-          label="Email"
-          type="email"
-          placeholder="Enter Email"
-          color="blue"
-        />
-        <TextInput
-          value={data.address}
-          onChange={(e) => setData({ ...data, address: e.target.value })}
-          label="Address"
-          type="text"
-          placeholder="Enter Address"
-          color="blue"
-        />
-        <TextInput
-          value={data.age}
-          onChange={(e) => setData({ ...data, age: Number(e.target.value) })}
-          label="Age"
-          type="number"
-          placeholder="Enter Age"
-          color="blue"
-        />
-        <TextInput
-          value={data.phone}
-          onChange={(e) => setData({ ...data, phone: e.target.value })}
-          label="Phone Number"
-          type="number"
-          placeholder="Enter Phone Number"
-          color="blue"
-        />
-        <TextInput
-          value={data.password}
-          onChange={(e) => setData({ ...data, password: e.target.value })}
-          label="Password"
-          type="password"
-          placeholder="Enter Password"
-          color="blue"
-        />
-        <TextInput
-          label='Gender'
-          placeholder='Enter Gender'
-          value={data.gender}
-          onChange={(e) => setData({ ...data, gender: e.target.value })}
-        />
+        {/* Form Fields */}
+        <div className="grid gap-4">
+          {[
+            { label: "Name", value: data.name, key: "name", type: "text" },
+            { label: "Email", value: data.email, key: "email", type: "email" },
+            { label: "Phone Number", value: data.phone, key: "phone", type: "number" },
+            { label: "Address", value: data.address, key: "address", type: "text" },
+            { label: "Age", value: data.age, key: "age", type: "number" },
+            { label: "Gender", value: data.gender, key: "gender", type: "text" },
+            { label: "Password", value: data.password, key: "password", type: "password" }
+          ].map((field) => (
+            <div key={field.key} className="flex flex-col space-y-1.5">
+              <Label htmlFor={field.key} className="text-gray-300 text-sm font-medium">
+                {field.label}
+              </Label>
+              <Input
+                id={field.key}
+                type={field.type}
+                value={field.value}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    [field.key]: field.type === "number" ? Number(e.target.value) : e.target.value
+                  })
+                }
+                className="rounded-xl border-none bg-gray-700 text-white h-11 px-4
+                           focus-visible:ring-2 focus-visible:ring-blue-400 
+                           focus-visible:ring-offset-0 placeholder:text-gray-400"
+                placeholder={`Enter ${field.label}`}
+              />
+            </div>
+          ))}
+        </div>
 
+        {/* Button */}
         <button
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-2xl transition"
+          className="w-full h-11 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition"
           onClick={handelRegister}
         >
-          {isLoading ? "Creating" : "Register"}
+          {isLoading ? "Creating..." : "Register"}
         </button>
 
+        {/* Switch to Login */}
         <p
-          className="text-blue-300 hover:underline text-right cursor-pointer"
-          onClick={handelSwitcher}
+          className="text-center text-gray-400 text-sm mt-4"
         >
-          Already have an account?
+          Already have an account?{" "}
+          <span
+            className="text-blue-400 hover:underline cursor-pointer"
+            onClick={handelSwitcher}
+          >
+            Login
+          </span>
         </p>
       </div>
     </div>
