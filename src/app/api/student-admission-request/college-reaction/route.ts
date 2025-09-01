@@ -12,7 +12,7 @@ export const GET = async (req: NextRequest) => {
     }
     const college = response.college
 
-    const allRequest = prisma.studentAdmissionRequest.findMany({
+    const allRequest =  await prisma.studentAdmissionRequest.findMany({
         where: {
             collegeId: college?.id
         }
@@ -28,7 +28,18 @@ export const POST = async (req: NextRequest) => {
         }
 
         const college = response.college;
-        const { requestId, studentId, isAccept, reason, name, session }: { name: string; requestId: number; studentId: number; isAccept: boolean; reason: string; session: Date } = await req.json()
+        
+        const { requestId,  isAccept, reason}: { requestId: number; isAccept: boolean; reason: string; } = await req.json()
+        const request = await prisma.studentAdmissionRequest.findFirst({where:{id:requestId}})
+        const student = await prisma.student.findFirst({
+            where:{
+                id:request?.studentId
+            }
+        })
+
+        if(!request){
+            return NextResponse.json({message:"Request not found"})
+        }
 
         if (!isAccept) {
             if (!reason) {
@@ -37,7 +48,7 @@ export const POST = async (req: NextRequest) => {
 
             await prisma.studentAdmissionRequest.update({
                 where: {
-                    studentId,
+                    studentId:request.studentId,
                     id: requestId,
                     collegeId: college?.id
                 },
@@ -57,12 +68,12 @@ export const POST = async (req: NextRequest) => {
 
             const createClass = await tx.class.create({
                 data: {
-                    name,
+                    name:student?.name as string,
                     stander: request.stander,
                     field: request?.field,
-                    studentId,
+                    studentId:request.studentId,
                     collegeId: college?.id,
-                    session,
+                    session:new Date(),
                     createdAt: new Date(),
                     updatedAt: new Date()
                 },
@@ -72,9 +83,9 @@ export const POST = async (req: NextRequest) => {
             await tx.collegeStudent.create({
                 data: {
                     collegeId: Number(college?.id),
-                    studentId,
+                    studentId:request.studentId,
                     classId: createClass.id,
-                    rollNumber: parseInt(`${college?.id}0000${studentId}`),
+                    rollNumber: parseInt(`${college?.id}0000${request.studentId}`),
                     createdAt: new Date(),
                     updatedAt: new Date()
                 }
@@ -97,7 +108,7 @@ export const POST = async (req: NextRequest) => {
             await tx.collegeFeePaymentByStudent.create({
                 data: {
                     transactionId: "",
-                    studentId: studentId,
+                    studentId: student?.id as number,
                     collegeId: Number(college?.id),
                     classId: createClass.id,
                     price: classPrice.price,

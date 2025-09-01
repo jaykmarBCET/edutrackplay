@@ -46,5 +46,7 @@ export const AllRoot = {
     // College-list
     CollegeListGet:"/api/college-list",
     // College Price by College id for student
-    CollegeClassPricingByCollegeId:"/api/college-class-pricing/class-pricing-by-college-id"
+    CollegeClassPricingByCollegeId:"/api/college-class-pricing/class-pricing-by-college-id",
+    // Student Profile by authorized college
+    StudentProfileByAuthorizedCollege:"/api/student-profile"
 }

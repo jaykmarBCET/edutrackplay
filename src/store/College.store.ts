@@ -194,3 +194,5 @@ export const useCollegeClassPriceStore = create<CollegeClassPricingStoreInfo>((s
         }
     }
 }))
+
+

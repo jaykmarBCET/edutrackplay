@@ -15,9 +15,33 @@ export interface StudentAdmissionRequestInfo{
     collegeId: number | null;
     coachingId: number | null;
 }
+export interface StudentProfileInfo {
+    name:string;
+    score:number,
+    phone?:string;
+    email:string;
+    dob:string;
+    address:string;
+    avatar:string;
+}
 
 export const StudentRequestContext = createContext<StudentAdmissionRequestInfo[]| []>([])
 
 export const useStudentRequestForCollege = ()=>{
     return useContext(StudentRequestContext)
+}
+
+
+interface StudentProfileInfoInitialData{
+    studentProfile:StudentProfileInfo | null;
+    getStudent:(studentId:number)=>Promise<void>
+}
+
+export const StudentProfileContext = createContext<StudentProfileInfoInitialData >({
+    studentProfile:null,
+    getStudent:async(studentId)=>{}
+})
+
+export const useStudentProfile = ()=>{
+    return useContext(StudentProfileContext)
 }
