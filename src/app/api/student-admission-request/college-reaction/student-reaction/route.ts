@@ -13,9 +13,19 @@ export const GET = async (req: NextRequest) => {
 
         const student = response.student
 
-        const allPayment = await prisma.collegeFeePaymentByStudent.findFirst({
+        const allPayment = await prisma.collegeFeePaymentByStudent.findMany({
             where: {
                 studentId: student?.id
+            },
+            include:{
+                class:{
+                    select:{
+                        field:true,
+                        stander:true,
+
+                    },
+                    
+                }
             }
         })
 
@@ -33,6 +43,6 @@ export const POST = async(req:NextRequest)=>{
     if(response.message){
         return NextResponse.json(response,{status:response.status})
     }
-
+    
     return NextResponse.json({message:"Success"},{status:200})
 }

@@ -10,11 +10,35 @@ export const GET = async (req: NextRequest) => {
     if (response.message) {
         return NextResponse.json(response, { status: 401 })
     }
+    const searchParams = (new URL(req.url)).searchParams
+    if(searchParams.get("requestId")){
+        const requestId = Number(searchParams.get("requestId"))
+
+        const studentAdmissionRequest = await prisma.studentAdmissionRequest.findFirstOrThrow({
+            where:{
+                id:requestId,
+            },
+            include:{
+                student:{
+                    
+                    select:{
+                        name:true,
+                        email:true,
+                        score:true,
+                        address:true
+                    }
+                }
+            }
+        })
+
+        return NextResponse.json(studentAdmissionRequest)
+    }
     const college = response.college
 
     const allRequest =  await prisma.studentAdmissionRequest.findMany({
         where: {
-            collegeId: college?.id
+            collegeId: college?.id,
+            isAccept:false
         }
     })
     return NextResponse.json(allRequest, { status: 200 })
@@ -36,6 +60,17 @@ export const POST = async (req: NextRequest) => {
                 id:request?.studentId
             }
         })
+
+        const alreadyHave = await prisma.collegeFeePaymentByStudent.findFirst({
+            where:{
+                studentId:student?.id,
+                collegeId:college?.id
+            }
+        })
+
+        if(alreadyHave){
+            return NextResponse.json({message:"Already have"},{status:400})
+        }
 
         if(!request){
             return NextResponse.json({message:"Request not found"})

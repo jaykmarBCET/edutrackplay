@@ -14,6 +14,12 @@ export interface StudentAdmissionRequestInfo{
     studentId: number;
     collegeId: number | null;
     coachingId: number | null;
+    student?: {
+        email: string,
+        name: string
+        score: number | null,
+        address: string
+    }
 }
 export interface StudentProfileInfo {
     name:string;
@@ -39,7 +45,9 @@ interface StudentProfileInfoInitialData{
 
 export const StudentProfileContext = createContext<StudentProfileInfoInitialData >({
     studentProfile:null,
-    getStudent:async(studentId)=>{}
+    getStudent:async(studentId)=>{
+        console.log(studentId)
+    }
 })
 
 export const useStudentProfile = ()=>{

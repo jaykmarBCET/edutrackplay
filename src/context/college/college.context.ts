@@ -1,5 +1,6 @@
 import { CollegeListInfo } from "@/store/Student.store"
 import { createContext, useContext } from "react"
+import { CollegeFeePaymentByStudentInfo } from "../../../types/types"
 
 // CollegeList Context
 export const CollegeListContext = createContext<CollegeListInfo[] | null>(null)
@@ -35,3 +36,20 @@ export const useCollegePriceById = ()=>{
     return all
 }
 
+// College Payment due 
+
+interface CollegePaymentDueListInfo{
+    paymentByStudent:CollegeFeePaymentByStudentInfo|null
+    getAllPaymentDue:()=>Promise<void>
+    sendMain:(studentId:number)=>Promise<void>
+}
+
+export const CollegePaymentDueListContext = createContext<CollegePaymentDueListInfo>({
+    paymentByStudent:null,
+    getAllPaymentDue:async()=>{},
+    sendMain:async(studentId:number)=>{}
+})
+
+export const usePaymentDueList = ()=>{
+    return useContext(CollegePaymentDueListContext)
+}
