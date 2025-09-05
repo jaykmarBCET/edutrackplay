@@ -115,8 +115,8 @@ model Class {
   createdAt  DateTime
   updatedAt  DateTime
 
-  college             College?                      @relation(fields: [collegeId], references: [id])
-  coaching            Coaching?                     @relation(fields: [coachingId], references: [id])
+  college             College?                      @relation(fields: [collegeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  coaching            Coaching?                     @relation(fields: [coachingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   payments            CoachingFeePaymentByStudent[]
   collegePayments     CollegeFeePaymentByStudent[]
   coachingEnrollments CoachingStudent[]
@@ -132,7 +132,7 @@ model CoachingClassPricing {
   createdAt  DateTime
   updatedAt  DateTime
 
-  coaching Coaching                      @relation(fields: [coachingId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  coaching Coaching                      @relation(fields: [coachingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   payments CoachingFeePaymentByStudent[]
 }
 
@@ -145,7 +145,7 @@ model CollegeClassPricing {
   createdAt DateTime
   updatedAt DateTime
 
-  college  College                      @relation(fields: [collegeId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  college  College                      @relation(fields: [collegeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   payments CollegeFeePaymentByStudent[]
 }
 
@@ -162,10 +162,10 @@ model CoachingFeePaymentByStudent {
   createdAt              DateTime
   updatedAt              DateTime
 
-  student              Student              @relation(fields: [studentId], references: [id])
-  coaching             Coaching             @relation(fields: [coachingId], references: [id])
-  class                Class                @relation(fields: [classId], references: [id])
-  coachingClassPricing CoachingClassPricing @relation(fields: [coachingClassPricingId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  student              Student              @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  coaching             Coaching             @relation(fields: [coachingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  class                Class                @relation(fields: [classId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  coachingClassPricing CoachingClassPricing @relation(fields: [coachingClassPricingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model CollegeFeePaymentByStudent {
@@ -181,10 +181,10 @@ model CollegeFeePaymentByStudent {
   createdAt             DateTime
   updatedAt             DateTime
 
-  student             Student             @relation(fields: [studentId], references: [id],onDelete: Cascade,onUpdate: Cascade)
-  college             College             @relation(fields: [collegeId], references: [id],onDelete: Cascade,onUpdate: Cascade)
-  class               Class               @relation(fields: [classId], references: [id],onDelete: Cascade,onUpdate: Cascade)
-  collegeClassPricing CollegeClassPricing @relation(fields: [collegeClassPricingId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  student             Student             @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  college             College             @relation(fields: [collegeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  class               Class               @relation(fields: [classId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  collegeClassPricing CollegeClassPricing @relation(fields: [collegeClassPricingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model CoachingStudent {
@@ -196,9 +196,9 @@ model CoachingStudent {
   createdAt  DateTime
   updatedAt  DateTime
 
-  coaching Coaching @relation(fields: [coachingId], references: [id])
-  student  Student  @relation(fields: [studentId], references: [id])
-  class    Class    @relation(fields: [classId], references: [id])
+  coaching Coaching @relation(fields: [coachingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  student  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  class    Class    @relation(fields: [classId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model CollegeStudent {
@@ -210,9 +210,9 @@ model CollegeStudent {
   createdAt  DateTime
   updatedAt  DateTime
 
-  college College @relation(fields: [collegeId], references: [id])
-  student Student @relation(fields: [studentId], references: [id])
-  class   Class   @relation(fields: [classId], references: [id])
+  college College @relation(fields: [collegeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model StudentAdmissionRequest {
@@ -229,7 +229,7 @@ model StudentAdmissionRequest {
   createdAt   DateTime
   updatedAt   DateTime
 
-  student  Student   @relation(fields: [studentId], references: [id])
-  college  College?  @relation(fields: [collegeId], references: [id])
-  coaching Coaching? @relation(fields: [coachingId], references: [id])
+  student  Student   @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  college  College?  @relation(fields: [collegeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  coaching Coaching? @relation(fields: [coachingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }

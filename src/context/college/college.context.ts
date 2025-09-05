@@ -36,20 +36,35 @@ export const useCollegePriceById = ()=>{
     return all
 }
 
+
 // College Payment due 
+interface StudentBasicInfo {
+    student:{
+    name:string;
+    avatar:string;
+    email:string;
+    phone:string;
+    id:string;
+    address:string
+    }
+}
+
+export type CollegeStudentPaymentDueInfo = CollegeFeePaymentByStudentInfo & StudentBasicInfo
 
 interface CollegePaymentDueListInfo{
-    paymentByStudent:CollegeFeePaymentByStudentInfo|null
+    paymentByStudent:CollegeStudentPaymentDueInfo[]|[]
     getAllPaymentDue:()=>Promise<void>
-    sendMain:(studentId:number)=>Promise<void>
+    sendMail:(studentId:number)=>Promise<void>
 }
 
 export const CollegePaymentDueListContext = createContext<CollegePaymentDueListInfo>({
-    paymentByStudent:null,
+    paymentByStudent:[],
     getAllPaymentDue:async()=>{},
-    sendMain:async(studentId:number)=>{}
+    sendMail:async(studentId:number)=>{
+        console.log(studentId)
+    }
 })
 
-export const usePaymentDueList = ()=>{
+export const useCollegePaymentDueList = ()=>{
     return useContext(CollegePaymentDueListContext)
 }

@@ -86,9 +86,9 @@ export interface CollegeFeePaymentByStudentInfo {
   price: number;
   collegeClassPricingId: number;
   expireDuration: number;
-  status?: "Payment failed" | "Payment Pending" | "Payment Successfully";
-  createdAt?: Date;
-  updatedAt?: Date;
+  status?: "failed" | "Pending" | "Successfully";
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 
 export interface CollegeStudentInfo {

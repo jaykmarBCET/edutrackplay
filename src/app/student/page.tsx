@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+
 import {
   BellIcon,
   Cog6ToothIcon,
@@ -13,13 +14,11 @@ import {
   AtSymbolIcon,
   BookOpenIcon,
   ClipboardDocumentListIcon,
-  SparklesIcon,
   AcademicCapIcon,
   BuildingLibraryIcon,
 } from '@heroicons/react/24/outline' 
 import StudentUpdate from '@/components/student/StudentUpdate'
-
-
+import { CreditCard } from 'lucide-react'
 function StudentPage() {
   const router = useRouter()
   const [showUpdateStudentModal, setShowUpdateParentModal] = useState<boolean>(false)
@@ -137,9 +136,9 @@ function StudentPage() {
           Check upcoming deadlines and submit your work.
         </DashboardCard>
         <DashboardCard
-          title="Upcoming Events"
-          icon={SparklesIcon}
-          onClick={() => toast('Exploring Events!')}
+          title="Payment Due"
+          icon={CreditCard}
+          onClick={() => window.location.href = "/student/payment"}
         >
           Stay updated with campus activities and important dates.
         </DashboardCard>

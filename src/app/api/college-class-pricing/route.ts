@@ -83,8 +83,10 @@ export const PUT = async (req: NextRequest) => {
     if (response.message) {
         return NextResponse.json(response, { status: response.status })
     }
-    const { classId, duration, price, stander }: { classId: number, duration: number, price: number, stander: number } = await req.json()
+    const {classId, duration, price, stander }: { classId: number, duration: number, price: number, stander: number } = await req.json()
     const college = response.college
+
+
 
     if (!classId) return NextResponse.json({ message: "class Id is required" }, { status: 401 })
     if (!price || !stander || !duration) {
