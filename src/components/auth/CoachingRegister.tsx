@@ -10,10 +10,10 @@ function CoachingRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
     name: '',
     owner_name: '',
     owner_email: '',
-    owner_phone: 0,
+    owner_phone: "",
     password: '',
     logo: '',
-    phone: 0,
+    phone: "",
     email: ''
   });
 
@@ -35,9 +35,7 @@ function CoachingRegister({ handelSwitcher }: { handelSwitcher: () => void }) {
   };
 
 
-  const handelRegister = ()=>{
-
-  }
+  
 
   return (
     <div className="flex flex-col items-center bg-gray-700 w-screen min-h-screen text-white px-4">

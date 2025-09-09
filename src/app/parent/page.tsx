@@ -7,7 +7,6 @@ import { useParentStore } from '@/store/Parent.store';
 import { AddStudent } from '@/components/parent/AddStudent';
 import { ParentUpdate } from '@/components/parent/ParentUpdate';
 import {
-  UserCircleIcon,
   PhoneIcon,
   EnvelopeIcon,
   CakeIcon,
@@ -133,7 +132,7 @@ function ParentPage() {
             ))
           ) : (
             <div className="col-span-full text-center py-12 text-gray-500 text-lg">
-              No students added yet. Click "Add New Student" to get started!
+              No students added yet. Click  Add New Student to get started!
             </div>
           )}
         </div>

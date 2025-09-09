@@ -42,7 +42,7 @@ function StudentPage() {
   const handleChangeEmail = () => router.push('/student/change-email')
 
 
-  const DashboardCard = ({ title, icon: Icon, children, onClick }) => (
+  const DashboardCard = ({ title, icon: Icon, children, onClick }:React.PropsWithChildren &{icon:React.ElementType;title:string;onClick:()=>void}) => (
     <div
       className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer flex flex-col items-start"
       onClick={onClick}
