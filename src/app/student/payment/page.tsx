@@ -10,10 +10,17 @@ import { AllRoot } from '@/constants/Routes'
 import { useStudentStore } from '@/store/Student.store'
 
 
+
 declare global {
     interface Window {
         Razorpay: any
     }
+}
+
+interface razorpayResponseType{
+    razorpay_order_id:string;
+    razorpay_payment_id:string;
+    razorpay_signature:string
 }
 
 function PaymentPage() {
@@ -56,7 +63,7 @@ const StudentPaymentCard = () => {
             name: "EduTrackPlay",
             description: "Educational Platform",
             order_id: data.orderId,
-            handler: async function (response: any) {
+            handler: async function (response:razorpayResponseType) {
                 const razorpayOrderId = response.razorpay_order_id
                 const razorpayPaymentId = response.razorpay_payment_id
                 const razorpaySignatureId = response.razorpay_signature

@@ -44,6 +44,7 @@ function CollegeClassPage() {
   const onSubmit = async (data: CollegeClassPricingInfo) => {
     if (!college) return
     const payload = { ...data, collegeId: college.id,classId:data.id }
+    
 
     if (data.id) {
       await updateClassPrice(payload)

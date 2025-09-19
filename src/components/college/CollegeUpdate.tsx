@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-    AcademicCapIcon,
+  AcademicCapIcon,
   PhotoIcon,
 } from '@heroicons/react/24/outline';
 import { CollegeInfo } from '../../../types/types';
@@ -16,22 +16,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 function CollegeUpdate({ onCancel }: { onCancel: () => void }) {
+
+  const {isLoading} = useCollegeStore()
   const [college, setCollege] = useState<CollegeInfo>({
-    title: useCollegeStore().college?.title as string,
-    name: useCollegeStore().college!.name,
-    address: '',
-    field: '',
-    owner_name: '',
-    owner_email: '',
+    title: useCollegeStore().college?.title!,
+    name: useCollegeStore().college?.name!,
+    address: useCollegeStore().college?.address!,
+    field: useCollegeStore().college?.field!,
+    owner_name: useCollegeStore().college?.owner_name!,
+    owner_email: useCollegeStore().college?.owner_email!,
     password: '',
     logo: '',
-    phone: '',
-    email: '',
-    website: '',
-    description: '',
+    phone: useCollegeStore().college?.phone!,
+    email:useCollegeStore().college?.email!,
+    website: useCollegeStore().college?.website,
+    description: useCollegeStore().college?.description,
   });
 
   const { updateCollege } = useCollegeStore();
+
+  
 
   const handelUpdate = async () => {
     const formData = new FormData();
@@ -52,8 +56,8 @@ function CollegeUpdate({ onCancel }: { onCancel: () => void }) {
   };
 
   return (
-    <Dialog open  onOpenChange={onCancel}>
-      <DialogContent className="max-w-lg mt-92 bg-gray-900 text-white border-gray-700">
+    <Dialog open onOpenChange={onCancel}>
+      <DialogContent className="bg-gray-900 text-white border-gray-700 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-indigo-400">
             Update College
@@ -101,87 +105,99 @@ function CollegeUpdate({ onCancel }: { onCancel: () => void }) {
             </div>
 
             {/* Inputs */}
-            <div className="grid gap-3">
-              <Label>College Name</Label>
-              <Input
-                value={college.name}
-                onChange={(e) => setCollege({ ...college, name: e.target.value })}
-                placeholder="Enter College Name"
-              />
-
-              <Label>Title</Label>
-              <Input
-                value={college.title}
-                onChange={(e) => setCollege({ ...college, title: e.target.value })}
-                placeholder="College Title"
-              />
-
-              <Label>Field</Label>
-              <Input
-                value={college.field}
-                onChange={(e) => setCollege({ ...college, field: e.target.value })}
-                placeholder="Field of Study"
-              />
-
-              <Label>Owner Name</Label>
-              <Input
-                value={college.owner_name}
-                onChange={(e) => setCollege({ ...college, owner_name: e.target.value })}
-                placeholder="Owner Name"
-              />
-
-              <Label>Owner Email</Label>
-              <Input
-                type="email"
-                value={college.owner_email}
-                onChange={(e) => setCollege({ ...college, owner_email: e.target.value })}
-                placeholder="Owner Email"
-              />
-
-              <Label>Owner Phone</Label>
-              <Input
-                type="tel"
-                value={college.owner_phone}
-                onChange={(e) => setCollege({ ...college, owner_phone: e.target.value })}
-                placeholder="Owner Phone"
-              />
-
-              <Label>College Phone</Label>
-              <Input
-                type="tel"
-                value={college.phone}
-                onChange={(e) => setCollege({ ...college, phone: e.target.value })}
-                placeholder="College Phone"
-              />
-
-              <Label>Email</Label>
-              <Input
-                type="email"
-                value={college.email}
-                onChange={(e) => setCollege({ ...college, email: e.target.value })}
-                placeholder="College Email"
-              />
-
-              <Label>Website</Label>
-              <Input
-                value={college.website}
-                onChange={(e) => setCollege({ ...college, website: e.target.value })}
-                placeholder="College Website"
-              />
-
-              <Label>Address</Label>
-              <Input
-                value={college.address}
-                onChange={(e) => setCollege({ ...college, address: e.target.value })}
-                placeholder="College Address"
-              />
-
-              <Label>Description</Label>
-              <Textarea
-                value={college.description}
-                onChange={(e) => setCollege({ ...college, description: e.target.value })}
-                placeholder="Short description about the college..."
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label>College Name</Label>
+                <Input
+                  value={college.name}
+                  onChange={(e) => setCollege({ ...college, name: e.target.value })}
+                  placeholder="Enter College Name"
+                />
+              </div>
+              <div>
+                <Label>Title</Label>
+                <Input
+                  value={college.title}
+                  onChange={(e) => setCollege({ ...college, title: e.target.value })}
+                  placeholder="College Title"
+                />
+              </div>
+              <div>
+                <Label>Field</Label>
+                <Input
+                  value={college.field}
+                  onChange={(e) => setCollege({ ...college, field: e.target.value })}
+                  placeholder="Field of Study"
+                />
+              </div>
+              <div>
+                <Label>Owner Name</Label>
+                <Input
+                  value={college.owner_name}
+                  onChange={(e) => setCollege({ ...college, owner_name: e.target.value })}
+                  placeholder="Owner Name"
+                />
+              </div>
+              <div>
+                <Label>Owner Email</Label>
+                <Input
+                  type="email"
+                  value={college.owner_email}
+                  onChange={(e) => setCollege({ ...college, owner_email: e.target.value })}
+                  placeholder="Owner Email"
+                />
+              </div>
+              <div>
+                <Label>Owner Phone</Label>
+                <Input
+                  type="tel"
+                  value={college.owner_phone}
+                  onChange={(e) => setCollege({ ...college, owner_phone: e.target.value })}
+                  placeholder="Owner Phone"
+                />
+              </div>
+              <div>
+                <Label>College Phone</Label>
+                <Input
+                  type="tel"
+                  value={college.phone}
+                  onChange={(e) => setCollege({ ...college, phone: e.target.value })}
+                  placeholder="College Phone"
+                />
+              </div>
+              <div>
+                <Label>Email</Label>
+                <Input
+                  type="email"
+                  value={college.email}
+                  onChange={(e) => setCollege({ ...college, email: e.target.value })}
+                  placeholder="College Email"
+                />
+              </div>
+              <div>
+                <Label>Website</Label>
+                <Input
+                  value={college.website}
+                  onChange={(e) => setCollege({ ...college, website: e.target.value })}
+                  placeholder="College Website"
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Address</Label>
+                <Input
+                  value={college.address}
+                  onChange={(e) => setCollege({ ...college, address: e.target.value })}
+                  placeholder="College Address"
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Description</Label>
+                <Textarea
+                  value={college.description}
+                  onChange={(e) => setCollege({ ...college, description: e.target.value })}
+                  placeholder="Short description about the college..."
+                />
+              </div>
             </div>
 
             {/* Actions */}
