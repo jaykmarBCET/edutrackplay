@@ -1,7 +1,6 @@
 import { PrismaClient } from "@/generated/prisma";
 import { generateToken } from "@/services/generateToken";
 import bcrypt from "bcryptjs";
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
@@ -30,18 +29,18 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json({ message: "Something went wrong while generating token" }, { status: 500 });
     }
 
-     const cookieStore = await cookies()
+    
 
-     cookieStore.set({
-      name:"parent",
-      value:token,
+    
+    
+
+    const res = NextResponse.json({ ...parentAccount }, { status: 200 });
+    return res.cookies.set("parent",token,{
       httpOnly:true,
       sameSite:"strict",
       secure:process.env.NODE_ENV==='production'
-     })
-    
+    })
 
-    return NextResponse.json({ ...parentAccount }, { status: 200 });
     
   } catch (error) {
     const errorInstance = error as Error;
