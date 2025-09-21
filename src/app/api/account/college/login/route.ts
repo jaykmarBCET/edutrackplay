@@ -1,4 +1,4 @@
-import {  NextResponse } from "next/server";
+import {  NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { generateToken } from "@/services/generateToken";
 import { cookies } from "next/headers";
@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 
 
 
-export const POST = async(req:NextResponse)=>{
+export const POST = async(req:NextRequest)=>{
      try {
         const {email , password}:{email:string,password:string} =  await req.json()
         console.log(email,password)
