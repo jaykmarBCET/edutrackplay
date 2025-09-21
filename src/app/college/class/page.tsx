@@ -44,12 +44,12 @@ function CollegeClassPage() {
   const onSubmit = async (data: CollegeClassPricingInfo) => {
     if (!college) return
     const payload = { ...data, collegeId: college.id,classId:data.id }
-    
+  
 
     if (data.id) {
-      await updateClassPrice(payload)
+      await updateClassPrice(payload as CollegeClassPricingInfo)
     } else {
-      await createClassPrice(payload)
+      await createClassPrice(payload as CollegeClassPricingInfo)
     }
     reset({ price: 0, stander: 1, duration: 12 })
   }

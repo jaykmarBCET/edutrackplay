@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 export const POST = async (req: NextRequest) => {
   try {
     const response = await authParent(req);
-    if (response.status > 300) {
+    if (response.message) {
       return NextResponse.json({ message: response.message }, { status: 401 });
     }
 
