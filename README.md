@@ -1,4 +1,4 @@
-# Edu Track Pay
+# Edu Track Play
 ---
 **In this we build college management project which manage college fee, event,attendance student also manage coaching**
 ___
